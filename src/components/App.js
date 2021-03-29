@@ -1,6 +1,5 @@
 import "./App.css";
 import React, { Component } from "react";
-// import { bossData } from "./Data.js";
 import "bootstrap/dist/css/bootstrap.css";
 import ShowItems from "./ShowItems.js";
 import UpgradeCosts from "./UpgradeCosts.js";

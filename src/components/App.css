@@ -30,6 +30,12 @@
   border: 2px solid chocolate;
   margin-top: 15px;
   width: 400px;
+  margin-left: 20px;
+  padding: 5px;
+}
+
+.upgradeOption ul {
+  list-style-type: none;
 }
 
 .upgradeOption__small {
