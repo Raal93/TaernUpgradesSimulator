@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.items {
+  width: 420px;
+}
+
+.items__item {
+  display: inline-block;
+  height: 70px;
+  width: 70px;
+  text-align: center;
+  background-color: black;
+  line-height: 70px;
+}
+
+.items__item img {
+  height: 50px;
+  width: auto;
+}
+
+.upgradeCosts {
+}
+
+.upgradeOption {
+  background-color: #fffacd;
+  border: 2px solid chocolate;
+  margin-top: 15px;
+  width: 400px;
+}
+
+.upgradeOption__small {
+  font-size: 12px;
+  display: block;
+}
