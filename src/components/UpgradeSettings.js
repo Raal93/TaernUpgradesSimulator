@@ -3,38 +3,46 @@ import UpgradeOption from "./UpgradeOption.js";
 
 class UpgradeSettings extends Component {
   state = {
-    upgradeGoal: 4,
+    upgradeGoal: 8,
     statesArray: [
-      [true, true, true],
+      [false, false, false],
+      [true, false, false],
+      [true, false, false],
+      [true, false, false],
+      [true, false, false],
       [true, true, true],
       [true, true, true],
       [true, true, true],
     ],
   };
 
-  componentDidMount() {
-    // let statesArray = [
-    //   [true, true, true],
-    //   [true, true, true],
-    //   [true, true, true],
-    //   [true, true, true],
-    // ];
-    // this.setState({
-    //   statesArray,
-    // });
-  }
+  handleUpgradeGoalChange = (e) => {
+    let statesArray = [];
+    for (let i = 0; i < e.target.value; i++) {
+      statesArray.push([
+        i > 0 ? true : false,
+        i > 4 ? true : false,
+        i > 4 ? true : false,
+      ]);
+    }
+
+    this.setState({
+      statesArray,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   handleOptionStatesChange = (upgradeStep, itemType) => {
     let statesArray = this.state.statesArray;
 
-    statesArray.map((upgradeOption, index) => {
+    statesArray = statesArray.map((upgradeOption, index) => {
       if (index === upgradeStep) {
         upgradeOption[itemType] = !upgradeOption[itemType];
+        return upgradeOption;
+      } else {
+        return upgradeOption;
       }
     });
-
-    // console.log(statesArray);
-    console.log(statesArray[1][0]);
 
     this.setState({
       statesArray,
@@ -43,6 +51,7 @@ class UpgradeSettings extends Component {
 
   showUpgradeSettings = () => {
     const { statesArray } = this.state;
+    const { handleOptionStatesChange } = this;
 
     let options = [];
     for (let i = 0; i < this.state.upgradeGoal; i++) {
@@ -52,22 +61,16 @@ class UpgradeSettings extends Component {
           key={i}
           isEssenceAdded={statesArray[i][0]}
           isReolAdded={statesArray[i][1]}
-          isAdded={statesArray[i][2]}
-          handleOptionStatesChange={this.handleOptionStatesChange}
+          isDviggAdded={statesArray[i][2]}
+          handleOptionStatesChange={handleOptionStatesChange}
         />
       );
     }
     return options;
   };
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
-
   render() {
-    const { showUpgradeSettings, handleChange } = this;
+    const { showUpgradeSettings, handleUpgradeGoalChange } = this;
     const { upgradeGoal } = this.state;
 
     return (
@@ -77,7 +80,7 @@ class UpgradeSettings extends Component {
           type="number"
           name="upgradeGoal"
           value={upgradeGoal}
-          onChange={handleChange}
+          onChange={handleUpgradeGoalChange}
           min="1"
           max="20"
         />

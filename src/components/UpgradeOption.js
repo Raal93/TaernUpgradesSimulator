@@ -1,39 +1,11 @@
 import React, { Component } from "react";
 
 class UpgradeOption extends Component {
-  state = {
-    // isEssenceAdded: true,
-    // isReolAdded: false,
-    // isDviggAdded: false,
-  };
-
-  componentDidMount() {
-    // this.setBasicOptions();
-  }
-
-  // setBasicOptions = () => {
-  //   const { upgradeStep } = this.props;
-
-  //   let isEssenceAdded = upgradeStep > 0 ? true : false;
-  //   let isReolAdded = upgradeStep > 5 ? true : false;
-  //   let isDviggAdded = upgradeStep > 5 ? true : false;
-
-  //   this.setState({
-  //     isEssenceAdded,
-  //     isReolAdded,
-  //     isDviggAdded,
-  //   });
-  // };
-
-  // handleChange = (e) => {
-  //   this.setState({
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  state = {};
 
   render() {
-    const { upgradeStep, handleOptionStatesChange, essencesValue } = this.props;
-    const { isEssenceAdded, isReolAdded, isDviggAdded } = this.state;
+    const { upgradeStep, handleOptionStatesChange } = this.props;
+    const { isEssenceAdded, isReolAdded, isDviggAdded } = this.props;
     // const { handleChange } = this;
 
     return (
