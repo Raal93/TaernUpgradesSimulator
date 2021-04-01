@@ -7,14 +7,24 @@ class SimulateUpgrade extends Component {
   };
 
   getRandomPercent() {
-    return Math.floor(Math.random() * Math.floor(100) + 1);
+    let rand;
+    do {
+      rand = Math.round(Math.random() * 10000) / 100;
+    } while (rand === 0);
+    // avoiding 0.00 as a result
+
+    // if (rand > 99.99 || rand < 0.01) {
+    //   console.log(rand);
+    // }
+
+    return rand;
   }
 
   generateUpgradeChancesArr = () => {
-    const { statesArray } = this.props;
+    const { upgradeAdditionals } = this.props;
     const { durability } = this.state;
 
-    let upgradeChances = statesArray.map((additionals, index) => {
+    let upgradeChances = upgradeAdditionals.map((additionals, index) => {
       switch (index) {
         case 0:
           return [
@@ -77,37 +87,68 @@ class SimulateUpgrade extends Component {
       upgradeChances,
     });
 
-    this.doSimulaton(upgradeChances);
+    return this.doSimulaton(upgradeChances);
   };
 
   simulateUpgrade = () => {
-    this.generateUpgradeChancesArr();
+    const { generateUpgradeChancesArr } = this;
+    let spinsCounter = 0;
+
+    let i = 0;
+    do {
+      spinsCounter += generateUpgradeChancesArr();
+      i++;
+    } while (i < 1000);
+
+    console.log(
+      "Ulepszenie zabrało średnio " +
+        Math.round(spinsCounter / 1000) +
+        " zakręceń."
+    );
   };
 
   doSimulaton = (upgradeChances) => {
     let i = 0;
     let counter = 0;
+
+    const { upgradeAdditionals } = this.props;
+    const { durability } = this.state;
+
     do {
-      let rand = this.getRandomPercent();
+      let finalDurability = upgradeAdditionals[i][1]
+        ? durability + 20
+        : durability;
+      let megaChance = upgradeAdditionals[i][2] ? 4 : 2;
+
+      let upgradeCondition = 100 - upgradeChances[i][0];
+      let megaUpgradeCondition = 100 - (upgradeAdditionals[i][2] ? 4 : 2);
+      let withstandCondition =
+        100 - (upgradeAdditionals[i][1] ? durability + 20 : durability);
+      let drawIfUpgradeSucceed = this.getRandomPercent();
       counter++;
-      if (rand > 100 - upgradeChances[i][0]) {
-        if (rand > 100 - upgradeChances[i][2]) {
-          i++;
-          console.log("udane mega");
-        }
-        i++;
-        console.log("ulepszenie udane");
-      } else {
-        let rand = this.getRandomPercent();
-        if (rand > upgradeChances[i][1]) {
-          console.log("ulepszenie nieudane ale wytrzymał");
-        } else {
+
+      if (drawIfUpgradeSucceed < upgradeCondition) {
+        // ulepszenie nieudane
+        let drawIfUpgradesResets = this.getRandomPercent();
+
+        if (drawIfUpgradesResets < withstandCondition) {
+          // wyzerowane
           i = 0;
-          console.log("ulepszenia zostały wyzerowane");
+        } else {
+          // sprzęt wytrzymał
         }
+      } else if (drawIfUpgradeSucceed < megaUpgradeCondition) {
+        // udane zwykłe ulepszenie
+        i++;
+      } else if (drawIfUpgradeSucceed >= megaUpgradeCondition) {
+        // udane mega ulepszenie
+        i++;
+        i++;
       }
     } while (i < this.props.upgradeGoal);
-    console.log("wymagało " + counter + " zakręceń.");
+    //
+    // console.log("wymagało " + counter + " zakręceń.");
+    return counter;
   };
 
   render() {

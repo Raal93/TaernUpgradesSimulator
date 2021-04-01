@@ -5,7 +5,7 @@ import SimulateUpgrade from "./SimulateUpgrade.js";
 class UpgradeSettings extends Component {
   state = {
     upgradeGoal: 11,
-    statesArray: [
+    upgradeAdditionals: [
       [false, false, false],
       [true, false, false],
       [true, false, false],
@@ -21,9 +21,9 @@ class UpgradeSettings extends Component {
   };
 
   handleUpgradeGoalChange = (e) => {
-    let statesArray = [];
+    let upgradeAdditionals = [];
     for (let i = 0; i < e.target.value; i++) {
-      statesArray.push([
+      upgradeAdditionals.push([
         i > 0 ? true : false,
         i > 4 ? true : false,
         i > 4 ? true : false,
@@ -31,15 +31,15 @@ class UpgradeSettings extends Component {
     }
 
     this.setState({
-      statesArray,
+      upgradeAdditionals,
       [e.target.name]: e.target.value,
     });
   };
 
   handleOptionStatesChange = (upgradeStep, itemType) => {
-    let statesArray = this.state.statesArray;
+    let upgradeAdditionals = this.state.upgradeAdditionals;
 
-    statesArray = statesArray.map((upgradeOption, index) => {
+    upgradeAdditionals = upgradeAdditionals.map((upgradeOption, index) => {
       if (index === upgradeStep) {
         upgradeOption[itemType] = !upgradeOption[itemType];
         return upgradeOption;
@@ -49,12 +49,12 @@ class UpgradeSettings extends Component {
     });
 
     this.setState({
-      statesArray,
+      upgradeAdditionals,
     });
   };
 
   showUpgradeSettings = () => {
-    const { statesArray } = this.state;
+    const { upgradeAdditionals } = this.state;
     const { handleOptionStatesChange } = this;
 
     let options = [];
@@ -63,9 +63,9 @@ class UpgradeSettings extends Component {
         <UpgradeOption
           upgradeStep={i}
           key={i}
-          isEssenceAdded={statesArray[i][0]}
-          isReolAdded={statesArray[i][1]}
-          isDviggAdded={statesArray[i][2]}
+          isEssenceAdded={upgradeAdditionals[i][0]}
+          isReolAdded={upgradeAdditionals[i][1]}
+          isDviggAdded={upgradeAdditionals[i][2]}
           handleOptionStatesChange={handleOptionStatesChange}
         />
       );
@@ -75,7 +75,7 @@ class UpgradeSettings extends Component {
 
   render() {
     const { showUpgradeSettings, handleUpgradeGoalChange } = this;
-    const { upgradeGoal, statesArray } = this.state;
+    const { upgradeGoal, upgradeAdditionals } = this.state;
 
     return (
       <>
@@ -93,7 +93,11 @@ class UpgradeSettings extends Component {
           {showUpgradeSettings()}
         </div>
 
-        <SimulateUpgrade upgradeGoal={upgradeGoal} statesArray={statesArray} />
+        <SimulateUpgrade
+          upgradeGoal={upgradeGoal}
+          upgradeAdditionals={upgradeAdditionals}
+          {...this.props}
+        />
       </>
     );
   }
