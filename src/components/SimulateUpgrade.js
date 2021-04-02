@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+// import { itemListByRank } from "./Data.js";
 
 class SimulateUpgrade extends Component {
   state = {
-    upgradeChances: [],
     durability: 45, // tmp
+    upgradeSimulationsAmount: 1000,
   };
 
   getRandomPercent() {
@@ -20,112 +21,69 @@ class SimulateUpgrade extends Component {
     return rand;
   }
 
-  generateUpgradeChancesArr = () => {
-    const { upgradeAdditionals } = this.props;
-    const { durability } = this.state;
-
-    let upgradeChances = upgradeAdditionals.map((additionals, index) => {
-      switch (index) {
-        case 0:
-          return [
-            additionals[0] ? 97 : 95,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 1:
-          return [
-            additionals[0] ? 95 : 85,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 2:
-          return [
-            additionals[0] ? 85 : 75,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 3:
-          return [
-            additionals[0] ? 75 : 65,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 4:
-          return [
-            additionals[0] ? 60 : 50,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 5:
-          return [
-            additionals[0] ? 50 : 40,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 6:
-          return [
-            additionals[0] ? 40 : 30,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        case 7:
-          return [
-            additionals[0] ? 30 : 20,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-        default:
-          return [
-            additionals[0] ? 20 : 10,
-            additionals[1] ? durability + 20 : durability,
-            additionals[2] ? 4 : 2,
-          ];
-      }
-    });
-
+  handleChange = (e) => {
     this.setState({
-      upgradeChances,
+      [e.target.name]: e.target.value,
     });
-
-    return this.doSimulaton(upgradeChances);
   };
 
-  simulateUpgrade = () => {
-    const { generateUpgradeChancesArr } = this;
-    let spinsCounter = 0;
+  calcUpgradeChance = (i) => {
+    const { upgradeAdditionals } = this.props;
+    let upgradeChance = 0;
 
-    let i = 0;
-    do {
-      spinsCounter += generateUpgradeChancesArr();
-      i++;
-    } while (i < 1000);
-
-    console.log(
-      "Ulepszenie zabrało średnio " +
-        Math.round(spinsCounter / 1000) +
-        " zakręceń."
-    );
+    switch (i) {
+      case 0:
+        upgradeChance = upgradeAdditionals[0] ? 97 : 95;
+        break;
+      case 1:
+        upgradeChance = upgradeAdditionals[0] ? 95 : 85;
+        break;
+      case 2:
+        upgradeChance = upgradeAdditionals[0] ? 85 : 75;
+        break;
+      case 3:
+        upgradeChance = upgradeAdditionals[0] ? 75 : 65;
+        break;
+      case 4:
+        upgradeChance = upgradeAdditionals[0] ? 60 : 50;
+        break;
+      case 5:
+        upgradeChance = upgradeAdditionals[0] ? 50 : 40;
+        break;
+      case 6:
+        upgradeChance = upgradeAdditionals[0] ? 40 : 30;
+        break;
+      case 7:
+        upgradeChance = upgradeAdditionals[0] ? 30 : 20;
+        break;
+      default:
+        upgradeChance = upgradeAdditionals[0] ? 20 : 10;
+        break;
+    }
+    return upgradeChance;
   };
 
-  doSimulaton = (upgradeChances) => {
+  doSimulaton = () => {
     let i = 0;
-    let counter = 0;
+    let spinCounter = 0;
+    let essenceCounter = 0;
+    let reolCounter = 0;
+    let dviggCounter = 0;
 
     const { upgradeAdditionals } = this.props;
     const { durability } = this.state;
+    const { calcUpgradeChance } = this;
 
     do {
-      let finalDurability = upgradeAdditionals[i][1]
-        ? durability + 20
-        : durability;
-      let megaChance = upgradeAdditionals[i][2] ? 4 : 2;
-
-      let upgradeCondition = 100 - upgradeChances[i][0];
+      let upgradeCondition = 100 - calcUpgradeChance(i);
       let megaUpgradeCondition = 100 - (upgradeAdditionals[i][2] ? 4 : 2);
       let withstandCondition =
         100 - (upgradeAdditionals[i][1] ? durability + 20 : durability);
       let drawIfUpgradeSucceed = this.getRandomPercent();
-      counter++;
+      spinCounter++;
+      essenceCounter += upgradeAdditionals[i][0] ? 1 : 0;
+      reolCounter += upgradeAdditionals[i][1] ? 1 : 0;
+      dviggCounter += upgradeAdditionals[i][2] ? 1 : 0;
 
       if (drawIfUpgradeSucceed < upgradeCondition) {
         // ulepszenie nieudane
@@ -148,15 +106,87 @@ class SimulateUpgrade extends Component {
     } while (i < this.props.upgradeGoal);
     //
     // console.log("wymagało " + counter + " zakręceń.");
-    return counter;
+    return [spinCounter, essenceCounter, reolCounter, dviggCounter];
+  };
+
+  simulateUpgrade = (event) => {
+    const upgradeSimulationsTarget = event.target[0].value;
+    event.preventDefault();
+    const { doSimulaton } = this;
+    let spinCounter = 0;
+    let essenceCounter = 0;
+    let reolCounter = 0;
+    let dviggCounter = 0;
+
+    let i = 0;
+    do {
+      const simulationResult = doSimulaton();
+      spinCounter += simulationResult[0];
+      essenceCounter += simulationResult[1];
+      reolCounter += simulationResult[2];
+      dviggCounter += simulationResult[3];
+
+      i++;
+    } while (i < upgradeSimulationsTarget);
+
+    // console.log(
+    //   "Ulepszenie zabrało średnio " +
+    //     Math.round(spinCounter / upgradeSimulationsTarget) +
+    //     " zakręceń."
+    // );
+    // console.log(
+    //   "Użytych zostało średnio: " +
+    //     Math.round(essenceCounter / upgradeSimulationsTarget) +
+    //     " esencji, " +
+    //     Math.round(reolCounter / upgradeSimulationsTarget) +
+    //     " reoli, " +
+    //     Math.round(dviggCounter / upgradeSimulationsTarget) +
+    //     " dviggów, oraz po " +
+    //     Math.round(spinCounter / upgradeSimulationsTarget) +
+    //     " inhibitorów i flaszek."
+    // );
+
+    // średni koszt ulepszenia:
+
+    const averageUpgradeCost =
+      (spinCounter * (this.props.flaskRate + 192000 + 200000) +
+        essenceCounter * this.props.essenceRate +
+        reolCounter * this.props.reolRate +
+        dviggCounter * this.props.dviggRate) /
+      upgradeSimulationsTarget;
+
+    console.log(
+      "Średni koszt ulepszenia to " +
+        Math.round(averageUpgradeCost / 1000000) +
+        "kk"
+    );
   };
 
   render() {
-    const { simulateUpgrade } = this;
+    const { simulateUpgrade, handleChange } = this;
+    const { upgradeSimulationsAmount } = this.state;
 
     return (
       <div className="simulateUpgrade">
-        <button onClick={simulateUpgrade}>Symuluj ulepszanie</button>
+        <form onSubmit={(e) => simulateUpgrade(e)}>
+          <label>
+            Wybierz ile symulacji ulepszania chcesz przeprowadzić
+            <select
+              onChange={handleChange}
+              name="upgradeSimulationsAmount"
+              value={upgradeSimulationsAmount}
+            >
+              <option value="1">1</option>
+              <option value="10">10</option>
+              <option value="100">100</option>
+              <option value="1000">1000</option>
+              <option value="10000">10 000</option>
+              <option value="100000">100 000 (uwaga)</option>
+              <option value="1000000">1 000 000 (uwaga!!!)</option>
+            </select>
+          </label>
+          <button>Przeprowadź symulacje</button>
+        </form>
       </div>
     );
   }
