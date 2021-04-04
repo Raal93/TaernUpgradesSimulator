@@ -4,7 +4,7 @@ import SimulateUpgrade from "./SimulateUpgrade.js";
 
 class UpgradeSettings extends Component {
   state = {
-    upgradeGoal: 11,
+    upgradeGoal: 8,
     upgradeAdditionals: [
       [false, false, false],
       [true, false, false],
@@ -14,11 +14,12 @@ class UpgradeSettings extends Component {
       [true, true, true],
       [true, true, true],
       [true, true, true],
-      [true, true, true],
-      [true, true, true],
-      [true, true, true],
     ],
   };
+
+  // [true, true, true],
+  // [true, true, true],
+  // [true, true, true],
 
   handleUpgradeGoalChange = (e) => {
     let upgradeAdditionals = [];
@@ -70,7 +71,7 @@ class UpgradeSettings extends Component {
         />
       );
     }
-    return options;
+    return <div className="upgradeOptionsContainer">{options}</div>;
   };
 
   render() {

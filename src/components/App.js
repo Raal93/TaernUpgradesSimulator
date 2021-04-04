@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import ShowItems from "./ShowItems.js";
 import UpgradeCosts from "./UpgradeCosts.js";
 import UpgradeSettings from "./UpgradeSettings.js";
+import { itemListByRank } from "./Data.js";
 
 class App extends Component {
   state = {
@@ -12,8 +13,40 @@ class App extends Component {
     essenceRate: 25000,
     platinumRate: 16000,
     flaskRate: 70000,
-    reolRate: 600000,
-    dviggRate: 300000,
+    reolRate: 500000,
+    dviggRate: 250000,
+    inhibCost: -1,
+    spinCost: -1,
+    durability: 45,
+  };
+
+  componentDidMount() {
+    this.setInhibCost();
+    this.setSpinCost();
+  }
+
+  setInhibCost = () => {
+    const { rank } = this.state;
+    const { itemList } = itemListByRank;
+
+    itemList.map((property) => {
+      if (property[0] === parseInt(rank)) {
+        this.setState({ inhibCost: property[2].inhibCost });
+      }
+      return null;
+    });
+  };
+
+  setSpinCost = () => {
+    const { rank } = this.state;
+    const { itemList } = itemListByRank;
+
+    itemList.map((property) => {
+      if (property[0] === parseInt(rank)) {
+        this.setState({ spinCost: property[2].upgradeCost });
+      }
+      return null;
+    });
   };
 
   handleInputChange = (e) => {
@@ -36,6 +69,9 @@ class App extends Component {
       flaskRate,
       reolRate,
       dviggRate,
+      inhibCost,
+      spinCost,
+      durability,
     } = this.state;
     const { handleChange, handleInputChange } = this;
 
@@ -64,6 +100,7 @@ class App extends Component {
           flaskRate={flaskRate}
           reolRate={reolRate}
           dviggRate={dviggRate}
+          durability={durability}
           handleInputChange={handleInputChange}
         />
         <UpgradeSettings
@@ -73,6 +110,9 @@ class App extends Component {
           flaskRate={flaskRate}
           reolRate={reolRate}
           dviggRate={dviggRate}
+          inhibCost={inhibCost}
+          spinCost={spinCost}
+          durability={durability}
         />
       </div>
     );

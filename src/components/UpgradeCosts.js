@@ -14,6 +14,7 @@ class UpgradeCosts extends Component {
       reolRate,
       dviggRate,
       handleInputChange,
+      durability,
     } = this.props;
 
     return itemList.map((itemList, index) => {
@@ -76,6 +77,18 @@ class UpgradeCosts extends Component {
                   value={dviggRate}
                   onChange={handleInputChange}
                   step="50000"
+                />
+              </li>
+              <li>
+                Wytrzymałość:{" "}
+                <input
+                  type="number"
+                  name="durability"
+                  value={durability}
+                  onChange={handleInputChange}
+                  step="1"
+                  min="35"
+                  max="50"
                 />
               </li>
             </ul>

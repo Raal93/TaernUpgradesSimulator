@@ -29,7 +29,7 @@
   background-color: #fffacd;
   border: 2px solid chocolate;
   margin-top: 15px;
-  width: 400px;
+  width: 300px;
   margin-left: 20px;
   padding: 5px;
 }
@@ -41,4 +41,46 @@
 .upgradeOption__small {
   font-size: 12px;
   display: block;
+}
+
+.upgradeOptionsContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.multipleSimulationsLoopContainer {
+  padding: 15px;
+}
+
+.newLine {
+  display: block;
+}
+
+.doSimulationBtn {
+  padding: 5px;
+}
+
+.upgradeProccess {
+  margin: 20px;
+  background-color: lightgoldenrodyellow;
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+}
+
+.singleSpin {
+  background-color: #fffacd;
+  border: 2px solid chocolate;
+  margin-top: 15px;
+  width: 250px;
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.singleSpin ul {
+  padding-left: 20px;
+}
+
+.singleSpin li {
+  /* margin-left: -10px; */
 }
