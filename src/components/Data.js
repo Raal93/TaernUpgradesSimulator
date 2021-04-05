@@ -973,6 +973,35 @@ export const itemListByRank = {
           itemName: "Karapaks",
           itemIcon: "https://wiki.taern.pl/images//b/be/Karapaks.jpg",
         },
+        {
+          itemName: "Allenor",
+          itemIcon: "https://wiki.taern.pl/images//a/a0/Allenor.jpg",
+        },
+        {
+          itemName: "Attawa",
+          itemIcon: "https://wiki.taern.pl/images//f/f5/Attawa.jpg",
+        },
+        {
+          itemName: "Imisindo",
+          itemIcon: "https://wiki.taern.pl/images//f/fb/Blask.jpg",
+        },
+        {
+          itemName: "Washi",
+          itemIcon: "https://wiki.taern.pl/images//8/8e/Kaishi.jpg",
+        },
+        {
+          itemName: "Żmij",
+          itemIcon: "https://wiki.taern.pl/images//1/11/%C5%BBmij.jpg",
+        },
+        {
+          itemName: "Latarnia Życia",
+          itemIcon:
+            "https://wiki.taern.pl/images//b/b9/Latarnia_%C5%BBycia.jpg",
+        },
+        {
+          itemName: "Gorthdar",
+          itemIcon: "https://wiki.taern.pl/images//2/2a/Gorthdar.jpg",
+        },
       ],
       {
         upgradeCost: 65000,

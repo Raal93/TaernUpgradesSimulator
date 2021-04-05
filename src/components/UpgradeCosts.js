@@ -88,7 +88,7 @@ class UpgradeCosts extends Component {
                   onChange={handleInputChange}
                   step="1"
                   min="35"
-                  max="50"
+                  max={parseInt(rank) === 10 ? "60" : "50"}
                 />
               </li>
             </ul>
