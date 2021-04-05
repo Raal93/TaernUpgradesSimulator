@@ -21,16 +21,16 @@ class ShowItems extends Component {
     });
   };
 
-  // showUpgradeCosts = () => {
-  //   return <></>;
-  // };
-
   render() {
-    // const { rank } = this.props;
-    // const { itemList } = itemListByRank;
+    const { rank } = this.props;
     const { showItems } = this;
 
-    return <div className="items">{showItems()}</div>;
+    return (
+      <div className="items">
+        <h4 className="title">Itemy rangi {rank}:</h4>
+        {showItems()}
+      </div>
+    );
   }
 }
 

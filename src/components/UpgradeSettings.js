@@ -80,17 +80,19 @@ class UpgradeSettings extends Component {
 
     return (
       <>
-        <div className="upgradesSettings">
-          <h5>Cel ulepszania:</h5>
-          <input
-            type="number"
-            name="upgradeGoal"
-            value={upgradeGoal}
-            onChange={handleUpgradeGoalChange}
-            min="1"
-            max="20"
-          />
-          <h3>Opcje ulepszania:</h3>
+        <div className="upgradeSettings">
+          <div className="upgradeGoal">
+            <span>Cel ulepszania:</span>
+            <input
+              type="number"
+              name="upgradeGoal"
+              value={upgradeGoal}
+              onChange={handleUpgradeGoalChange}
+              min="1"
+              max="20"
+            />
+          </div>
+          <h4>Opcje ulepszania:</h4>
           {showUpgradeSettings()}
         </div>
 

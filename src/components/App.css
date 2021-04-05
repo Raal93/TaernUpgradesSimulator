@@ -4,8 +4,24 @@
   box-sizing: border-box;
 }
 
+.appContainer {
+  padding: 15px;
+}
+
+.rankSelectLabel {
+  text-align: center;
+}
+
 .items {
-  width: 420px;
+  width: 520px;
+  text-align: center;
+  background-color: black;
+  border: 5px solid darkgreen;
+  padding: 10px;
+}
+
+.items .title {
+  color: green;
 }
 
 .items__item {
@@ -23,6 +39,22 @@
 }
 
 .upgradeCosts {
+  margin-top: 15px;
+}
+
+.upgradeCosts ul {
+  margin-left: 50px;
+}
+
+.upgradeCosts li {
+  padding-top: 5px;
+}
+
+.upgradeCosts input {
+  width: 100px;
+  margin-left: 10px;
+  padding-left: 5px;
+  /* border-radius: 2%; */
 }
 
 .upgradeOption {
@@ -83,4 +115,27 @@
 
 .singleSpin li {
   /* margin-left: -10px; */
+}
+
+.summary ul {
+  margin-left: 25px;
+}
+
+.upgradeSettings h4 {
+  margin-top: 25px;
+  margin-bottom: -5px;
+  /* text-align: center; */
+}
+
+.upgradeGoal span {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.upgradeGoal input {
+  margin-left: 10px;
+  padding-left: 10px;
+  width: 70px;
 }

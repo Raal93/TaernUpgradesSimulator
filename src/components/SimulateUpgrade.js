@@ -6,6 +6,8 @@ class multipleSimulationsLoop extends Component {
     // durability: 45, // tmp
     upgradeSimulationsAmount: 10000,
     upgradingProccessTranscription: [],
+
+    isSummaryShown: false,
   };
 
   getRandomPercent() {
@@ -167,32 +169,24 @@ class multipleSimulationsLoop extends Component {
     const upgradeSimulationsTarget = event.target[0].value;
     event.preventDefault();
     const { singleSimulationProccess } = this;
-    // let spinCounter = 0;
-    // let essenceCounter = 0;
-    // let reolCounter = 0;
-    // let dviggCounter = 0;
-    // let reolCounterArray = [];
     let upgradingProccessTranscription = [];
 
     let i = 0;
     do {
       const simulationResult = singleSimulationProccess();
-      // spinCounter += simulationResult[0];
-
-      // essenceCounter += simulationResult[1];
-      // reolCounter += simulationResult[2];
-      // reolCounterArray.push(simulationResult[2]);
-      // dviggCounter += simulationResult[3];
 
       upgradingProccessTranscription.push(simulationResult[4]);
       i++;
     } while (i < upgradeSimulationsTarget);
 
-    this.setState({ upgradingProccessTranscription });
+    this.setState({
+      upgradingProccessTranscription,
+      isSummaryShown: true,
+    });
   };
   render() {
     const { multipleSimulationsLoop, handleChange } = this;
-    const { upgradeSimulationsAmount } = this.state;
+    const { upgradeSimulationsAmount, isSummaryShown } = this.state;
 
     return (
       <>
@@ -234,6 +228,7 @@ class multipleSimulationsLoop extends Component {
           upgradingProccessTranscription={
             this.state.upgradingProccessTranscription
           }
+          isSummaryShown={isSummaryShown}
           {...this.props}
         />
       </>
@@ -345,7 +340,7 @@ class ShowUpgradeTranscription extends Component {
 
     return (
       <div className="simulateTranscripton">
-        <h5>Zapis ulepszania:</h5>
+        {/* <h5>Zapis ulepszania:</h5> */}
         {/* {showTranscription()} */}
       </div>
     );
@@ -548,7 +543,7 @@ class ShowUpgradeSummary extends Component {
       ) / 100;
 
     return (
-      <div>
+      <div className="summary">
         <h5>Podsumowanie</h5>
         <ul>
           <li>
@@ -587,20 +582,20 @@ class ShowUpgradeSummary extends Component {
               <li>
                 {averageDviggAmount} dviggów ({averageDviggCost}kk)
               </li>
-              <li>
-                Średni koszt ulepszenia wyniósł:{" "}
-                {Math.round(
-                  (averageSpinAmount * spinCost +
-                    averageInhibAmount * inhibCost * platinumRate +
-                    averageFlaskAmount * flaskRate +
-                    averageEssenceAmount * essenceRate +
-                    averageReolAmount * reolRate +
-                    averageDviggAmount * dviggRate) /
-                    10000
-                ) / 100}
-                kk
-              </li>
             </ul>
+          </li>
+          <li>
+            Średni koszt ulepszenia wyniósł:{" "}
+            {Math.round(
+              (averageSpinAmount * spinCost +
+                averageInhibAmount * inhibCost * platinumRate +
+                averageFlaskAmount * flaskRate +
+                averageEssenceAmount * essenceRate +
+                averageReolAmount * reolRate +
+                averageDviggAmount * dviggRate) /
+                10000
+            ) / 100}
+            kk
           </li>
         </ul>
       </div>
@@ -609,9 +604,12 @@ class ShowUpgradeSummary extends Component {
 
   render() {
     const { showSummary } = this;
+    const { isSummaryShown } = this.props;
     return (
       <>
-        <div className="upgradeSummary">{showSummary()}</div>
+        {isSummaryShown ? (
+          <div className="upgradeSummary">{showSummary()}</div>
+        ) : null}
       </>
     );
   }

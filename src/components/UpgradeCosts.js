@@ -21,8 +21,9 @@ class UpgradeCosts extends Component {
       if (itemList[0] === parseInt(rank)) {
         return (
           <div className="upgradeCosts" key={index}>
+            <h5>Parametry ulepszania</h5>
             <ul>
-              <li>Koszt zakręcenia: {itemList[2].upgradeCost}</li>
+              <li>Koszt zakręcenia: {itemList[2].upgradeCost / 1000}k</li>
               <li>
                 Koszt inhibitora:{" "}
                 {(itemList[2].inhibCost * platinumRate) / 1000}k (
@@ -57,7 +58,10 @@ class UpgradeCosts extends Component {
                   onChange={handleInputChange}
                   step="5000"
                 />
-                <span> (wymagana {itemList[2].flask} flaszka)</span>
+                <span className="newLine">
+                  {" "}
+                  (wymagana {itemList[2].flask} flaszka)
+                </span>
               </li>
               <li>
                 Koszt reola:{" "}

@@ -85,10 +85,17 @@ class App extends Component {
     const { handleSelectChange, handleInputChange } = this;
 
     return (
-      <div>
-        <label>
-          Wybierz rangę itemu
-          <select onChange={handleSelectChange} value={rank} name="rank">
+      <div className="appContainer">
+        <label className="rankSelectLabel">
+          <span className="newLine">
+            Wybierz rangę itemu, którego ulepszanie chcesz zasymulować:
+          </span>
+          <select
+            className="rankSelect"
+            onChange={handleSelectChange}
+            value={rank}
+            name="rank"
+          >
             <option value="3">III</option>
             <option value="4">IV</option>
             <option value="5">V</option>
