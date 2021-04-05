@@ -2,9 +2,9 @@ import "./App.css";
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import ShowItems from "./ShowItems.js";
-import UpgradeCosts from "./UpgradeCosts.js";
-import UpgradeSettings from "./UpgradeSettings.js";
+import SetUpgradeParameters from "./SetUpgradeParameters.js";
 import { itemListByRank } from "./Data.js";
+import SimulateUpgrade from "./SimulateUpgrade.js";
 
 class App extends Component {
   state = {
@@ -18,7 +18,23 @@ class App extends Component {
     inhibCost: -1,
     spinCost: -1,
     durability: 45,
+
+    upgradeGoal: 8,
+    upgradeAdditionals: [
+      [false, false, false],
+      [true, false, false],
+      [true, false, false],
+      [true, false, false],
+      [true, false, false],
+      [true, true, true],
+      [true, true, true],
+      [true, true, true],
+    ],
   };
+
+  // [true, true, true],
+  // [true, true, true],
+  // [true, true, true],
 
   componentDidMount() {
     this.setInhibCost(this.state.rank);
@@ -26,7 +42,6 @@ class App extends Component {
   }
 
   setInhibCost = (rank) => {
-    // const { rank } = this.state;
     const { itemList } = itemListByRank;
 
     itemList.map((property) => {
@@ -38,7 +53,6 @@ class App extends Component {
   };
 
   setSpinCost = (rank) => {
-    // const { rank } = this.state;
     const { itemList } = itemListByRank;
 
     itemList.map((property) => {
@@ -70,6 +84,39 @@ class App extends Component {
     this.setSpinCost(e.target.value);
   };
 
+  handleUpgradeGoalChange = (e) => {
+    let upgradeAdditionals = [];
+    for (let i = 0; i < e.target.value; i++) {
+      upgradeAdditionals.push([
+        i > 0 ? true : false,
+        i > 4 ? true : false,
+        i > 4 ? true : false,
+      ]);
+    }
+
+    this.setState({
+      upgradeAdditionals,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  handleOptionStatesChange = (upgradeStep, itemType) => {
+    let upgradeAdditionals = this.state.upgradeAdditionals;
+
+    upgradeAdditionals = upgradeAdditionals.map((upgradeOption, index) => {
+      if (index === upgradeStep) {
+        upgradeOption[itemType] = !upgradeOption[itemType];
+        return upgradeOption;
+      } else {
+        return upgradeOption;
+      }
+    });
+
+    this.setState({
+      upgradeAdditionals,
+    });
+  };
+
   render() {
     const {
       rank,
@@ -81,8 +128,15 @@ class App extends Component {
       inhibCost,
       spinCost,
       durability,
+      upgradeAdditionals,
+      upgradeGoal,
     } = this.state;
-    const { handleSelectChange, handleInputChange } = this;
+    const {
+      handleSelectChange,
+      handleInputChange,
+      handleUpgradeGoalChange,
+      handleOptionStatesChange,
+    } = this;
 
     return (
       <div className="appContainer">
@@ -109,7 +163,7 @@ class App extends Component {
           </select>
         </label>
         <ShowItems rank={rank} />
-        <UpgradeCosts
+        <SetUpgradeParameters
           rank={rank}
           essenceRate={essenceRate}
           platinumRate={platinumRate}
@@ -117,18 +171,25 @@ class App extends Component {
           reolRate={reolRate}
           dviggRate={dviggRate}
           durability={durability}
-          handleInputChange={handleInputChange}
-        />
-        <UpgradeSettings
-          rank={rank}
-          essenceRate={essenceRate}
-          platinumRate={platinumRate}
-          flaskRate={flaskRate}
-          reolRate={reolRate}
-          dviggRate={dviggRate}
           inhibCost={inhibCost}
           spinCost={spinCost}
+          handleInputChange={handleInputChange}
+          handleUpgradeGoalChange={handleUpgradeGoalChange}
+          handleOptionStatesChange={handleOptionStatesChange}
+          upgradeGoal={upgradeGoal}
+          upgradeAdditionals={upgradeAdditionals}
+        />
+        <SimulateUpgrade
+          upgradeGoal={upgradeGoal}
+          upgradeAdditionals={upgradeAdditionals}
+          essenceRate={essenceRate}
+          platinumRate={platinumRate}
+          flaskRate={flaskRate}
+          reolRate={reolRate}
+          dviggRate={dviggRate}
           durability={durability}
+          inhibCost={inhibCost}
+          spinCost={spinCost}
         />
       </div>
     );

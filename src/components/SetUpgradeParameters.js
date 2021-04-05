@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { itemListByRank } from "./Data.js";
+import SetUpgradeAdditionals from "./SetUpgradeAdditionals.js";
 
-class UpgradeCosts extends Component {
+class SetUpgradeParameters extends Component {
   state = {};
 
   showUpgradeCosts = () => {
@@ -104,11 +105,55 @@ class UpgradeCosts extends Component {
     });
   };
 
+  showUpgradeSettings = () => {
+    const {
+      upgradeAdditionals,
+      handleOptionStatesChange,
+      upgradeGoal,
+    } = this.props;
+
+    let options = [];
+    for (let i = 0; i < upgradeGoal; i++) {
+      options.push(
+        <SetUpgradeAdditionals
+          upgradeStep={i}
+          key={i}
+          isEssenceAdded={upgradeAdditionals[i][0]}
+          isReolAdded={upgradeAdditionals[i][1]}
+          isDviggAdded={upgradeAdditionals[i][2]}
+          handleOptionStatesChange={handleOptionStatesChange}
+        />
+      );
+    }
+    return <div className="upgradeOptionsContainer">{options}</div>;
+  };
+
   render() {
     const { showUpgradeCosts } = this;
+    const { showUpgradeSettings } = this;
+    const { upgradeGoal, handleUpgradeGoalChange } = this.props;
 
-    return <div className="upgradesCosts">{showUpgradeCosts()}</div>;
+    return (
+      <>
+        <div className="upgradesCosts">{showUpgradeCosts()}</div>
+        <div className="upgradeSettings">
+          <div className="upgradeGoal">
+            <span>Cel ulepszania:</span>
+            <input
+              type="number"
+              name="upgradeGoal"
+              value={upgradeGoal}
+              onChange={handleUpgradeGoalChange}
+              min="1"
+              max="20"
+            />
+          </div>
+          <h4>Opcje ulepszania:</h4>
+          {showUpgradeSettings()}
+        </div>
+      </>
+    );
   }
 }
 
-export default UpgradeCosts;
+export default SetUpgradeParameters;

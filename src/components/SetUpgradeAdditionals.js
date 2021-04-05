@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 
-class UpgradeOption extends Component {
+class SetUpgradeAdditionals extends Component {
   state = {};
 
   render() {
     const { upgradeStep, handleOptionStatesChange } = this.props;
     const { isEssenceAdded, isReolAdded, isDviggAdded } = this.props;
-    // const { handleChange } = this;
 
     return (
       <div className="upgradeOption">
@@ -48,4 +47,4 @@ class UpgradeOption extends Component {
   }
 }
 
-export default UpgradeOption;
+export default SetUpgradeAdditionals;
