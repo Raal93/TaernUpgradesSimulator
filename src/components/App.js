@@ -21,12 +21,12 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.setInhibCost();
-    this.setSpinCost();
+    this.setInhibCost(this.state.rank);
+    this.setSpinCost(this.state.rank);
   }
 
-  setInhibCost = () => {
-    const { rank } = this.state;
+  setInhibCost = (rank) => {
+    // const { rank } = this.state;
     const { itemList } = itemListByRank;
 
     itemList.map((property) => {
@@ -37,8 +37,8 @@ class App extends Component {
     });
   };
 
-  setSpinCost = () => {
-    const { rank } = this.state;
+  setSpinCost = (rank) => {
+    // const { rank } = this.state;
     const { itemList } = itemListByRank;
 
     itemList.map((property) => {
@@ -61,6 +61,15 @@ class App extends Component {
     });
   };
 
+  handleSelectChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+
+    this.setInhibCost(e.target.value);
+    this.setSpinCost(e.target.value);
+  };
+
   render() {
     const {
       rank,
@@ -73,13 +82,13 @@ class App extends Component {
       spinCost,
       durability,
     } = this.state;
-    const { handleChange, handleInputChange } = this;
+    const { handleSelectChange, handleInputChange } = this;
 
     return (
       <div>
         <label>
           Wybierz rangę itemu
-          <select onChange={handleChange} value={rank} name="rank">
+          <select onChange={handleSelectChange} value={rank} name="rank">
             <option value="3">III</option>
             <option value="4">IV</option>
             <option value="5">V</option>
