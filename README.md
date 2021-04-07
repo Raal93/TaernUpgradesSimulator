@@ -1,6 +1,4 @@
-gh-pages: 
-
-https://raal93.github.io/TaernUpgradesSimulator/
+gh-pages:  https://raal93.github.io/TaernUpgradesSimulator/
 
 
 Taern Upgrade Simulator is a tool that helps players plan and organize upgrades for items.
