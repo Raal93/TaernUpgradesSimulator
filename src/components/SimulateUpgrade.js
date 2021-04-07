@@ -186,7 +186,11 @@ class multipleSimulationsLoop extends Component {
   };
   render() {
     const { multipleSimulationsLoop, handleChange } = this;
-    const { upgradeSimulationsAmount, isSummaryShown } = this.state;
+    const {
+      upgradeSimulationsAmount,
+      isSummaryShown,
+      upgradingProccessTranscription,
+    } = this.state;
 
     return (
       <>
@@ -219,15 +223,13 @@ class multipleSimulationsLoop extends Component {
             </div>
           </form>
         </div>
-        <ShowUpgradeTranscription
+        {/* <ShowUpgradeTranscription
           upgradingProccessTranscription={
             this.state.upgradingProccessTranscription
           }
-        />
+        /> */}
         <ShowUpgradeSummary
-          upgradingProccessTranscription={
-            this.state.upgradingProccessTranscription
-          }
+          upgradingProccessTranscription={upgradingProccessTranscription}
           isSummaryShown={isSummaryShown}
           {...this.props}
         />
