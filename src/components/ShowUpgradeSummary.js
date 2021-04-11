@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 
 class ShowUpgradeSummary extends Component {
+  state = {
+    indexOfMaxSpinsProccess: 0,
+    indexOfMinSpinsProccess: 0,
+  };
   calcAverageAmount = (x) => {
     const upgradeSimulationsAmount = this.props.allSimulationsData.length;
 
@@ -58,7 +62,13 @@ class ShowUpgradeSummary extends Component {
     let reolAmountPerSingleProccess = 0;
     let dviggAmountPerSingleProccess = 0;
 
-    allSimulationsData.map((singleSimulationProccess) => {
+    let maxSpinsPerSingleProccess = 0;
+    let indexOfMaxSpinsProccess;
+
+    let minSpinsPerSingleProccess = 999999;
+    let indexOfMinSpinsProccess;
+
+    allSimulationsData.map((singleSimulationProccess, index) => {
       singleSimulationProccess.map((singleSpin) => {
         essencesAmountPerSingleProccess += singleSpin[0] ? 1 : 0;
         reolAmountPerSingleProccess += singleSpin[1] ? 1 : 0;
@@ -67,6 +77,20 @@ class ShowUpgradeSummary extends Component {
       });
 
       spinsAmountTotal += singleSimulationProccess.length;
+
+      if (singleSimulationProccess.length > maxSpinsPerSingleProccess) {
+        maxSpinsPerSingleProccess = singleSimulationProccess.length;
+        indexOfMaxSpinsProccess = index;
+        // console.log(maxSpinsPerSingleProccess);
+        // console.log(indexOfMaxSpinsProccess);
+      }
+
+      if (singleSimulationProccess.length < minSpinsPerSingleProccess) {
+        minSpinsPerSingleProccess = singleSimulationProccess.length;
+        indexOfMinSpinsProccess = index;
+        // console.log(minSpinsPerSingleProccess);
+        // console.log(indexOfMinSpinsProccess);
+      }
 
       essencesAmountTotal += essencesAmountPerSingleProccess;
       essencesAmountPerSingleProccess = 0;
@@ -85,6 +109,8 @@ class ShowUpgradeSummary extends Component {
       essencesAmountTotal: essencesAmountTotal,
       reolAmountTotal: reolAmountTotal,
       dviggAmountTotal: dviggAmountTotal,
+      indexOfMaxSpinsProccess: indexOfMaxSpinsProccess,
+      indexOfMinSpinsProccess: indexOfMinSpinsProccess,
     };
   };
 
@@ -128,6 +154,7 @@ class ShowUpgradeSummary extends Component {
 
   showSummary = () => {
     const { calcAverageUpgradeCost } = this;
+    const { allSimulationsData } = this.props;
 
     const upgradeSimulationsAmount = this.props.allSimulationsData.length;
     const averages = this.calcAverages();
@@ -152,6 +179,8 @@ class ShowUpgradeSummary extends Component {
       essencesAmountTotal,
       reolAmountTotal,
       dviggAmountTotal,
+      indexOfMaxSpinsProccess,
+      indexOfMinSpinsProccess,
     } = totals;
 
     return (
@@ -195,10 +224,26 @@ class ShowUpgradeSummary extends Component {
               </li>
             </ul>
           </li>
-          <li>
+          {/* <li>
             Średni koszt ulepszenia wyniósł: {calcAverageUpgradeCost(averages)}
             kk
           </li>
+          <li>
+            Najbardziej pechowe ulepszenie wyniosło:
+            <SingleSimulationProccessData
+              curentSimulationProccess={
+                allSimulationsData[indexOfMaxSpinsProccess]
+              }
+            />
+          </li>
+          <li>
+            Najszczęśliwsze ulepszenie wyniosło:
+            <SingleSimulationProccessData
+              curentSimulationProccess={
+                allSimulationsData[indexOfMinSpinsProccess]
+              }
+            />
+          </li> */}
         </ul>
       </>
     );
@@ -218,3 +263,32 @@ class ShowUpgradeSummary extends Component {
 }
 
 export default ShowUpgradeSummary;
+
+class SingleSimulationProccessData extends Component {
+  calcSum = (curentSimulationProccess, item) => {
+    let itemCounter = 0;
+
+    curentSimulationProccess.map((singleSpin) => {
+      itemCounter += singleSpin[item] ? 1 : 0;
+      return null;
+    });
+
+    return itemCounter;
+  };
+
+  render() {
+    const { curentSimulationProccess } = this.props;
+    const { calcSum } = this;
+
+    return (
+      <ul>
+        <li>{curentSimulationProccess.length} zakręceń</li>
+        <li>{curentSimulationProccess.length} inhibitorów</li>
+        <li>{curentSimulationProccess.length} flasz</li>
+        <li>{calcSum(curentSimulationProccess, 0)} esencji</li>
+        <li>{calcSum(curentSimulationProccess, 1)} reoli</li>
+        <li>{calcSum(curentSimulationProccess, 2)} dviggów</li>
+      </ul>
+    );
+  }
+}
