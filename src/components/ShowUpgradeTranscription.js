@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-// Component not in use currently
+// Component is not in use currently
 
 class ShowUpgradeTranscription extends Component {
   resultMsg = (ifUpgradeSucceed, ifWithstoodOrMega) => {

@@ -1,92 +1,19 @@
 import React, { Component } from "react";
 
 class ShowUpgradeSummary extends Component {
-  resultMsg = (ifUpgradeSucceed, ifWithstoodOrMega) => {
-    if (ifUpgradeSucceed && ifWithstoodOrMega) {
-      return "Udane MEGA ulepszenie!";
-    } else if (ifUpgradeSucceed && !ifWithstoodOrMega) {
-      return "Ulepszenie udane.";
-    } else if (!ifUpgradeSucceed && ifWithstoodOrMega) {
-      return "Ulepszenie nieudane. Sprzęt wytrzymał proces.";
-    } else if (!ifUpgradeSucceed && !ifWithstoodOrMega) {
-      return "Ulepszenie nieudane. Ulepszenia zostały wyzerowane.";
-    }
+  calcAverageAmount = (x) => {
+    const upgradeSimulationsAmount = this.props.allSimulationsData.length;
+
+    return Math.round((x / upgradeSimulationsAmount) * 100) / 100;
   };
 
-  ifwithstoodMsg = (randIfWithstand, durability) => {
-    return (
-      <li>
-        Losowanie czy sprzęt wytrzyma: {randIfWithstand}% (próg wytrzymania:{" "}
-        {100 - durability}%
-        {randIfWithstand < 100 - durability
-          ? ", zabrakło " +
-            Math.round((100 - durability - randIfWithstand) * 100) / 100 +
-            "%"
-          : null}
-        ).
-      </li>
-    );
+  calcAverageCost = (x, z) => {
+    const upgradeSimulationsAmount = this.props.allSimulationsData.length;
+
+    return Math.round(((x / upgradeSimulationsAmount) * z) / 10000) / 100;
   };
 
-  showSpinTranscription = (item, index) => {
-    const { ifwithstoodMsg, resultMsg } = this;
-
-    return (
-      <div className="singleSpin">
-        {/* // czy eska [0]
-                  // czy reol [1]
-                  // czy dvigg [2]
-                  // szansa na ulepszenie [3]
-                  // szansa na MEGA [4]
-                  // wytrzymalosc efektywna [5]
-                  // wylosowana wartosc [6]
-                  // ulepszenie przed spinem [7]
-                  // info czy udane [8]
-                  // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
-                  // wylosowana wartosc czy srzet wytrzyma [10]
-                  // ulepszenie po spinie [11]
-                   */}
-        <ul>
-          <li>
-            Spin nr <strong>{index + 1}:</strong>
-          </li>
-          <li>
-            Ulepszenie przed próbą ulepszenia <strong>+{item[7]}</strong>
-          </li>
-          <li>
-            Użyto: inhib, flaszka, {item[0] ? "esencja, " : ""}
-            {item[1] ? "reol, " : ""}
-            {item[2] ? "dvigg, " : ""}
-          </li>
-          <li>
-            Szansa na kolejne ulepszenie {item[3]}% (mega {item[4]}%)
-          </li>
-          <li>Wytrzymałość efektywna: {item[5]}% </li>
-          <li>
-            Losowanie czy ulepszy: {item[6]}% (próg wejscia: {100 - item[3]}%,
-            mega: {100 - item[4]}%
-            {item[6] < 100 - item[3]
-              ? ", zabrakło " +
-                Math.round((100 - item[3] - item[6]) * 100) / 100 +
-                "%)."
-              : ")."}
-          </li>
-          {item[8] ? null : ifwithstoodMsg(item[10], item[5])}
-          <li>
-            <strong>{resultMsg(item[8], item[9])}</strong>
-          </li>
-          <li>
-            <strong>
-              Aktualne ulepszenie: +{item[11]}
-              {item[12] ? ". Cel ulepszania osiągnięty." : null}
-            </strong>
-          </li>
-        </ul>
-      </div>
-    );
-  };
-
-  showSummary = () => {
+  calcAverageUpgradeCost = (averages) => {
     const {
       essenceRate,
       platinumRate,
@@ -96,99 +23,151 @@ class ShowUpgradeSummary extends Component {
       inhibCost,
       spinCost,
     } = this.props;
+
+    const {
+      averageSpinAmount,
+      averageInhibAmount,
+      averageFlaskAmount,
+      averageEssenceAmount,
+      averageReolAmount,
+      averageDviggAmount,
+    } = averages;
+
+    return (
+      Math.round(
+        (averageSpinAmount * spinCost +
+          averageInhibAmount * inhibCost * platinumRate +
+          averageFlaskAmount * flaskRate +
+          averageEssenceAmount * essenceRate +
+          averageReolAmount * reolRate +
+          averageDviggAmount * dviggRate) /
+          10000
+      ) / 100
+    );
+  };
+
+  calcTotals = () => {
     const { allSimulationsData } = this.props;
-    // const { showSpinTranscription } = this;
 
-    // console.log(allSimulationsData);
+    let spinsAmountTotal = 0;
+    let essencesAmountTotal = 0;
+    let reolAmountTotal = 0;
+    let dviggAmountTotal = 0;
 
-    let spinsPerSingleProccess = 0;
-    let spinsAmountGlobal = 0;
     let essencesAmountPerSingleProccess = 0;
-    let essencesAmountGlobal = 0;
     let reolAmountPerSingleProccess = 0;
-    let reolAmountGlobal = 0;
     let dviggAmountPerSingleProccess = 0;
-    let dviggAmountGlobal = 0;
 
     allSimulationsData.map((singleSimulationProccess) => {
-      singleSimulationProccess.map((singleSpin, index) => {
+      singleSimulationProccess.map((singleSpin) => {
         essencesAmountPerSingleProccess += singleSpin[0] ? 1 : 0;
         reolAmountPerSingleProccess += singleSpin[1] ? 1 : 0;
         dviggAmountPerSingleProccess += singleSpin[2] ? 1 : 0;
-        // showSpinTranscription(singleSpin, index);
         return null;
       });
-      spinsPerSingleProccess = singleSimulationProccess.length;
-      spinsAmountGlobal += spinsPerSingleProccess;
 
-      essencesAmountGlobal += essencesAmountPerSingleProccess;
+      spinsAmountTotal += singleSimulationProccess.length;
+
+      essencesAmountTotal += essencesAmountPerSingleProccess;
       essencesAmountPerSingleProccess = 0;
 
-      reolAmountGlobal += reolAmountPerSingleProccess;
+      reolAmountTotal += reolAmountPerSingleProccess;
       reolAmountPerSingleProccess = 0;
 
-      dviggAmountGlobal += dviggAmountPerSingleProccess;
+      dviggAmountTotal += dviggAmountPerSingleProccess;
       dviggAmountPerSingleProccess = 0;
 
       return null;
     });
-    let averageSpinAmount =
-      Math.round((spinsAmountGlobal / allSimulationsData.length) * 100) / 100;
-    let averageInhibAmount =
-      Math.round((spinsAmountGlobal / allSimulationsData.length) * 100) / 100;
-    let averageFlaskAmount =
-      Math.round((spinsAmountGlobal / allSimulationsData.length) * 100) / 100;
-    let averageEssenceAmount =
-      Math.round((essencesAmountGlobal / allSimulationsData.length) * 100) /
-      100;
-    let averageReolAmount =
-      Math.round((reolAmountGlobal / allSimulationsData.length) * 100) / 100;
-    let averageDviggAmount =
-      Math.round((dviggAmountGlobal / allSimulationsData.length) * 100) / 100;
 
-    let averageSpinCost =
-      Math.round(
-        ((spinsAmountGlobal / allSimulationsData.length) * spinCost) / 10000
-      ) / 100;
-    let averageInhibCost =
-      Math.round(
-        ((spinsAmountGlobal / allSimulationsData.length) *
-          inhibCost *
-          platinumRate) /
-          10000
-      ) / 100;
-    let averageFlaskCost =
-      Math.round(
-        ((spinsAmountGlobal / allSimulationsData.length) * flaskRate) / 10000
-      ) / 100;
-    let averageEssenceCost =
-      Math.round(
-        ((essencesAmountGlobal / allSimulationsData.length) * essenceRate) /
-          10000
-      ) / 100;
-    let averageReolCost =
-      Math.round(
-        ((reolAmountGlobal / allSimulationsData.length) * reolRate) / 10000
-      ) / 100;
-    let averageDviggCost =
-      Math.round(
-        ((dviggAmountGlobal / allSimulationsData.length) * dviggRate) / 10000
-      ) / 100;
+    return {
+      spinsAmountTotal: spinsAmountTotal,
+      essencesAmountTotal: essencesAmountTotal,
+      reolAmountTotal: reolAmountTotal,
+      dviggAmountTotal: dviggAmountTotal,
+    };
+  };
+
+  calcAverages = () => {
+    const { calcAverageAmount, calcAverageCost } = this;
+    const {
+      essenceRate,
+      platinumRate,
+      flaskRate,
+      reolRate,
+      dviggRate,
+      inhibCost,
+      spinCost,
+    } = this.props;
+
+    const totals = this.calcTotals();
+    const {
+      spinsAmountTotal,
+      essencesAmountTotal,
+      reolAmountTotal,
+      dviggAmountTotal,
+    } = totals;
+    const inhibCostGold = inhibCost * platinumRate;
+
+    return {
+      averageSpinAmount: calcAverageAmount(spinsAmountTotal),
+      averageInhibAmount: calcAverageAmount(spinsAmountTotal),
+      averageFlaskAmount: calcAverageAmount(spinsAmountTotal),
+      averageEssenceAmount: calcAverageAmount(essencesAmountTotal),
+      averageReolAmount: calcAverageAmount(reolAmountTotal),
+      averageDviggAmount: calcAverageAmount(dviggAmountTotal),
+
+      averageSpinCost: calcAverageCost(spinsAmountTotal, spinCost),
+      averageInhibCost: calcAverageCost(spinsAmountTotal, inhibCostGold),
+      averageFlaskCost: calcAverageCost(spinsAmountTotal, flaskRate),
+      averageEssenceCost: calcAverageCost(essencesAmountTotal, essenceRate),
+      averageReolCost: calcAverageCost(reolAmountTotal, reolRate),
+      averageDviggCost: calcAverageCost(dviggAmountTotal, dviggRate),
+    };
+  };
+
+  showSummary = () => {
+    const { calcAverageUpgradeCost } = this;
+
+    const upgradeSimulationsAmount = this.props.allSimulationsData.length;
+    const averages = this.calcAverages();
+    const {
+      averageSpinAmount,
+      averageInhibAmount,
+      averageFlaskAmount,
+      averageEssenceAmount,
+      averageReolAmount,
+      averageDviggAmount,
+      averageSpinCost,
+      averageInhibCost,
+      averageFlaskCost,
+      averageEssenceCost,
+      averageReolCost,
+      averageDviggCost,
+    } = averages;
+
+    const totals = this.calcTotals();
+    const {
+      spinsAmountTotal,
+      essencesAmountTotal,
+      reolAmountTotal,
+      dviggAmountTotal,
+    } = totals;
 
     return (
-      <div className="summary">
+      <>
         <h5>Podsumowanie</h5>
         <ul>
-          <li>Wykonano {allSimulationsData.length} procesów ulepszania.</li>
-          <li>Zasymulowano {spinsAmountGlobal} zakręceń zegara</li>
+          <li>Wykonano {upgradeSimulationsAmount} procesów ulepszania.</li>
+          <li>Zasymulowano {spinsAmountTotal} zakręceń zegara</li>
           <li>
             Użyto:
             <ul>
-              <li>{spinsAmountGlobal} inhibitorów,</li>
-              <li>{spinsAmountGlobal} flasz,</li>
-              <li>{essencesAmountGlobal} esencji,</li>
-              <li>{reolAmountGlobal} reoli,</li>
-              <li>{dviggAmountGlobal} dviggów.</li>
+              <li>{spinsAmountTotal} inhibitorów,</li>
+              <li>{spinsAmountTotal} flasz,</li>
+              <li>{essencesAmountTotal} esencji,</li>
+              <li>{reolAmountTotal} reoli,</li>
+              <li>{dviggAmountTotal} dviggów.</li>
             </ul>
           </li>
           <li>
@@ -201,13 +180,15 @@ class ShowUpgradeSummary extends Component {
                 {averageInhibAmount} inhibitorów ({averageInhibCost}kk)
               </li>
               <li>
-                {averageFlaskAmount} flasz ({averageFlaskCost}kk)
+                {averageFlaskAmount} flasz ({averageFlaskCost}
+                kk)
               </li>
               <li>
                 {averageEssenceAmount} esencji ({averageEssenceCost}kk)
               </li>
               <li>
-                {averageReolAmount} reoli ({averageReolCost}kk)
+                {averageReolAmount} reoli ({averageReolCost}
+                kk)
               </li>
               <li>
                 {averageDviggAmount} dviggów ({averageDviggCost}kk)
@@ -215,20 +196,11 @@ class ShowUpgradeSummary extends Component {
             </ul>
           </li>
           <li>
-            Średni koszt ulepszenia wyniósł:{" "}
-            {Math.round(
-              (averageSpinAmount * spinCost +
-                averageInhibAmount * inhibCost * platinumRate +
-                averageFlaskAmount * flaskRate +
-                averageEssenceAmount * essenceRate +
-                averageReolAmount * reolRate +
-                averageDviggAmount * dviggRate) /
-                10000
-            ) / 100}
+            Średni koszt ulepszenia wyniósł: {calcAverageUpgradeCost(averages)}
             kk
           </li>
         </ul>
-      </div>
+      </>
     );
   };
 
