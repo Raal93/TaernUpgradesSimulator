@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { itemListByRank } from "./Data.js";
 import SetUpgradeAdditionals from "./SetUpgradeAdditionals.js";
+import ShowItems from "./ShowItems.js";
 
 class SetUpgradeParameters extends Component {
   state = {};
@@ -14,7 +15,7 @@ class SetUpgradeParameters extends Component {
       flaskRate,
       reolRate,
       dviggRate,
-      handleInputChange,
+      handleChange,
       durability,
     } = this.props;
 
@@ -36,7 +37,7 @@ class SetUpgradeParameters extends Component {
                   type="number"
                   name="platinumRate"
                   value={platinumRate}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   step="500"
                 />
               </li>
@@ -46,7 +47,7 @@ class SetUpgradeParameters extends Component {
                   type="number"
                   name="essenceRate"
                   value={essenceRate}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   step="500"
                 />
               </li>
@@ -56,7 +57,7 @@ class SetUpgradeParameters extends Component {
                   type="number"
                   name="flaskRate"
                   value={flaskRate}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   step="5000"
                 />
                 <span className="newLine">
@@ -70,7 +71,7 @@ class SetUpgradeParameters extends Component {
                   type="number"
                   name="reolRate"
                   value={reolRate}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   step="50000"
                 />
               </li>
@@ -80,7 +81,7 @@ class SetUpgradeParameters extends Component {
                   type="number"
                   name="dviggRate"
                   value={dviggRate}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   step="50000"
                 />
               </li>
@@ -90,7 +91,7 @@ class SetUpgradeParameters extends Component {
                   type="number"
                   name="durability"
                   value={durability}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   step="1"
                   min="35"
                   max={parseInt(rank) === 10 ? "60" : "50"}
@@ -108,7 +109,7 @@ class SetUpgradeParameters extends Component {
   showUpgradeSettings = () => {
     const {
       upgradeAdditionals,
-      handleOptionStatesChange,
+      handleUpgradeOptionChange,
       upgradeGoal,
     } = this.props;
 
@@ -121,7 +122,7 @@ class SetUpgradeParameters extends Component {
           isEssenceAdded={upgradeAdditionals[i][0]}
           isReolAdded={upgradeAdditionals[i][1]}
           isDviggAdded={upgradeAdditionals[i][2]}
-          handleOptionStatesChange={handleOptionStatesChange}
+          handleUpgradeOptionChange={handleUpgradeOptionChange}
         />
       );
     }
@@ -131,10 +132,38 @@ class SetUpgradeParameters extends Component {
   render() {
     const { showUpgradeCosts } = this;
     const { showUpgradeSettings } = this;
-    const { upgradeGoal, handleUpgradeGoalChange } = this.props;
+    const {
+      upgradeGoal,
+      handleUpgradeGoalChange,
+      handleItemRankChange,
+      rank,
+    } = this.props;
 
     return (
       <>
+        <label className="rankSelectLabel">
+          <span className="newLine">
+            Wybierz rangę itemu, którego ulepszanie chcesz zasymulować:
+          </span>
+          <select
+            className="rankSelect"
+            onChange={handleItemRankChange}
+            value={rank}
+            name="rank"
+          >
+            <option value="3">III</option>
+            <option value="4">IV</option>
+            <option value="5">V</option>
+            <option value="6">VI</option>
+            <option value="7">VII</option>
+            <option value="8">VIII</option>
+            <option value="9">IX</option>
+            <option value="10">X</option>
+            <option value="11">XI</option>
+            <option value="12">XII</option>
+          </select>
+        </label>
+        <ShowItems rank={rank} />
         <div className="upgradesCosts">{showUpgradeCosts()}</div>
         <div className="upgradeSettings">
           <div className="upgradeGoal">

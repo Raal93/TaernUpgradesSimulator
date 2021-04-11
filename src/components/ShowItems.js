@@ -11,7 +11,7 @@ class ShowItems extends Component {
         return itemList[1].map((items, index) => {
           return (
             <div className="items__item" key={index}>
-              <img src={items.itemIcon} alt={items.itemName} />
+              {/* <img src={items.itemIcon} alt={items.itemName} /> */}
             </div>
           );
         });

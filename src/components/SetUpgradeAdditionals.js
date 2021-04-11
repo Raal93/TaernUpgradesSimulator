@@ -4,7 +4,7 @@ class SetUpgradeAdditionals extends Component {
   state = {};
 
   render() {
-    const { upgradeStep, handleOptionStatesChange } = this.props;
+    const { upgradeStep, handleUpgradeOptionChange } = this.props;
     const { isEssenceAdded, isReolAdded, isDviggAdded } = this.props;
 
     return (
@@ -18,7 +18,7 @@ class SetUpgradeAdditionals extends Component {
             czy esencja{" "}
             <input
               type="checkbox"
-              onChange={() => handleOptionStatesChange(upgradeStep, 0)}
+              onChange={() => handleUpgradeOptionChange(upgradeStep, 0)}
               checked={isEssenceAdded}
               name="isEssenceAdded"
             />
@@ -27,7 +27,7 @@ class SetUpgradeAdditionals extends Component {
             czy reol{" "}
             <input
               type="checkbox"
-              onChange={() => handleOptionStatesChange(upgradeStep, 1)}
+              onChange={() => handleUpgradeOptionChange(upgradeStep, 1)}
               checked={isReolAdded}
               name="isReolAdded"
             />
@@ -36,7 +36,7 @@ class SetUpgradeAdditionals extends Component {
             czy dvigg{" "}
             <input
               type="checkbox"
-              onChange={() => handleOptionStatesChange(upgradeStep, 2)}
+              onChange={() => handleUpgradeOptionChange(upgradeStep, 2)}
               checked={isDviggAdded}
               name="isDviggAdded"
             />

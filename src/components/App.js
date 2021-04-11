@@ -1,7 +1,6 @@
 import "./App.css";
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import ShowItems from "./ShowItems.js";
 import SetUpgradeParameters from "./SetUpgradeParameters.js";
 import { itemListByRank } from "./Data.js";
 import SimulateUpgrade from "./SimulateUpgrade.js";
@@ -26,7 +25,7 @@ class App extends Component {
       [true, false, false],
       [true, false, false],
       [true, false, false],
-      [true, true, true],
+      [true, false, false],
       [true, true, true],
       [true, true, true],
     ],
@@ -37,35 +36,20 @@ class App extends Component {
   // [true, true, true],
 
   componentDidMount() {
-    this.setInhibCost(this.state.rank);
-    this.setSpinCost(this.state.rank);
+    this.setInhibAndSpinCost(this.state.rank);
   }
 
-  setInhibCost = (rank) => {
+  setInhibAndSpinCost = (rank) => {
     const { itemList } = itemListByRank;
 
     itemList.map((property) => {
       if (property[0] === parseInt(rank)) {
-        this.setState({ inhibCost: property[2].inhibCost });
+        this.setState({
+          inhibCost: property[2].inhibCost,
+          spinCost: property[2].upgradeCost,
+        });
       }
       return null;
-    });
-  };
-
-  setSpinCost = (rank) => {
-    const { itemList } = itemListByRank;
-
-    itemList.map((property) => {
-      if (property[0] === parseInt(rank)) {
-        this.setState({ spinCost: property[2].upgradeCost });
-      }
-      return null;
-    });
-  };
-
-  handleInputChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
     });
   };
 
@@ -75,32 +59,35 @@ class App extends Component {
     });
   };
 
-  handleSelectChange = (e) => {
+  handleItemRankChange = (e) => {
+    const newRank = e.target.value;
+
     this.setState({
-      [e.target.name]: e.target.value,
+      [e.target.name]: newRank,
     });
 
-    this.setInhibCost(e.target.value);
-    this.setSpinCost(e.target.value);
+    this.setInhibAndSpinCost(newRank);
   };
 
   handleUpgradeGoalChange = (e) => {
+    const newUpgradeGoal = e.target.value;
     let upgradeAdditionals = [];
-    for (let i = 0; i < e.target.value; i++) {
+
+    for (let i = 0; i < newUpgradeGoal; i++) {
       upgradeAdditionals.push([
         i > 0 ? true : false,
-        i > 4 ? true : false,
-        i > 4 ? true : false,
+        i > 5 ? true : false,
+        i > 5 ? true : false,
       ]);
     }
 
     this.setState({
       upgradeAdditionals,
-      [e.target.name]: e.target.value,
+      [e.target.name]: newUpgradeGoal,
     });
   };
 
-  handleOptionStatesChange = (upgradeStep, itemType) => {
+  handleUpgradeOptionChange = (upgradeStep, itemType) => {
     let upgradeAdditionals = this.state.upgradeAdditionals;
 
     upgradeAdditionals = upgradeAdditionals.map((upgradeOption, index) => {
@@ -132,37 +119,14 @@ class App extends Component {
       upgradeGoal,
     } = this.state;
     const {
-      handleSelectChange,
-      handleInputChange,
+      handleItemRankChange,
+      handleChange,
       handleUpgradeGoalChange,
-      handleOptionStatesChange,
+      handleUpgradeOptionChange,
     } = this;
 
     return (
       <div className="appContainer">
-        <label className="rankSelectLabel">
-          <span className="newLine">
-            Wybierz rangę itemu, którego ulepszanie chcesz zasymulować:
-          </span>
-          <select
-            className="rankSelect"
-            onChange={handleSelectChange}
-            value={rank}
-            name="rank"
-          >
-            <option value="3">III</option>
-            <option value="4">IV</option>
-            <option value="5">V</option>
-            <option value="6">VI</option>
-            <option value="7">VII</option>
-            <option value="8">VIII</option>
-            <option value="9">IX</option>
-            <option value="10">X</option>
-            <option value="11">XI</option>
-            <option value="12">XII</option>
-          </select>
-        </label>
-        <ShowItems rank={rank} />
         <SetUpgradeParameters
           rank={rank}
           essenceRate={essenceRate}
@@ -173,9 +137,10 @@ class App extends Component {
           durability={durability}
           inhibCost={inhibCost}
           spinCost={spinCost}
-          handleInputChange={handleInputChange}
+          handleChange={handleChange}
           handleUpgradeGoalChange={handleUpgradeGoalChange}
-          handleOptionStatesChange={handleOptionStatesChange}
+          handleUpgradeOptionChange={handleUpgradeOptionChange}
+          handleItemRankChange={handleItemRankChange}
           upgradeGoal={upgradeGoal}
           upgradeAdditionals={upgradeAdditionals}
         />

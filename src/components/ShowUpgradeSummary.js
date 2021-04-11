@@ -34,7 +34,7 @@ class ShowUpgradeSummary extends Component {
     return (
       <div className="singleSpin">
         {/* // czy eska [0]
-                  // czy reaol [1]
+                  // czy reol [1]
                   // czy dvigg [2]
                   // szansa na ulepszenie [3]
                   // szansa na MEGA [4]

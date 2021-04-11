@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import ShowUpgradeTranscription from "./ShowUpgradeTranscription.js";
 import ShowUpgradeSummary from "./ShowUpgradeSummary.js";
 
 class multipleSimulationsLoop extends Component {
   state = {
-    upgradeSimulationsAmount: 10000,
+    upgradeSimulationsAmount: 1,
     upgradingProccessTranscription: [],
 
     isSummaryShown: false,
@@ -36,38 +35,42 @@ class multipleSimulationsLoop extends Component {
 
     switch (i) {
       case 0:
-        upgradeChance = upgradeAdditionals[0] ? 97 : 95;
+        upgradeChance = upgradeAdditionals[i][0] ? 97 : 95;
         break;
       case 1:
-        upgradeChance = upgradeAdditionals[0] ? 95 : 85;
+        upgradeChance = upgradeAdditionals[i][0] ? 95 : 85;
         break;
       case 2:
-        upgradeChance = upgradeAdditionals[0] ? 85 : 75;
+        upgradeChance = upgradeAdditionals[i][0] ? 85 : 75;
         break;
       case 3:
-        upgradeChance = upgradeAdditionals[0] ? 75 : 65;
+        upgradeChance = upgradeAdditionals[i][0] ? 75 : 65;
         break;
       case 4:
-        upgradeChance = upgradeAdditionals[0] ? 60 : 50;
+        upgradeChance = upgradeAdditionals[i][0] ? 60 : 50;
         break;
       case 5:
-        upgradeChance = upgradeAdditionals[0] ? 50 : 40;
+        upgradeChance = upgradeAdditionals[i][0] ? 50 : 40;
         break;
       case 6:
-        upgradeChance = upgradeAdditionals[0] ? 40 : 30;
+        upgradeChance = upgradeAdditionals[i][0] ? 40 : 30;
         break;
       case 7:
-        upgradeChance = upgradeAdditionals[0] ? 30 : 20;
+        upgradeChance = upgradeAdditionals[i][0] ? 30 : 20;
         break;
       default:
-        upgradeChance = upgradeAdditionals[0] ? 20 : 10;
+        upgradeChance = upgradeAdditionals[i][0] ? 20 : 10;
         break;
     }
     return upgradeChance;
   };
 
+  isUpgradeGoalAcheved = (upgradeLevel, upgradeGoal) => {
+    return upgradeLevel >= upgradeGoal;
+  };
+
   singleSimulationProccess = () => {
-    let i = 0;
+    let upgradeLevel = 0;
     let spinCounter = 0;
     let essenceCounter = 0;
     let reolCounter = 0;
@@ -76,35 +79,38 @@ class multipleSimulationsLoop extends Component {
 
     const { upgradeAdditionals } = this.props;
     const { durability } = this.props;
-    const { calcUpgradeChance } = this;
+    const { calcUpgradeChance, isUpgradeGoalAcheved } = this;
 
     do {
       const { upgradeGoal } = this.props;
 
-      let upgradeCondition = 100 - calcUpgradeChance(i);
-      let megaUpgradeCondition = 100 - (upgradeAdditionals[i][2] ? 4 : 2);
-      let withstandCondition =
-        100 -
-        (upgradeAdditionals[i][1]
-          ? parseInt(durability) + 20
-          : parseInt(durability));
-      let drawIfUpgradeSucceed = this.getRandomPercent();
+      const ifEssence = upgradeAdditionals[upgradeLevel][0];
+      const ifReol = upgradeAdditionals[upgradeLevel][1];
+      const ifDvigg = upgradeAdditionals[upgradeLevel][2];
+      const durabilityInProccess = ifReol
+        ? parseInt(durability) + 20
+        : parseInt(durability);
+      const upgradeChance = calcUpgradeChance(upgradeLevel);
+      const megaUpgradeChance = ifDvigg ? 4 : 2;
+      const upgradeCondition = 100 - upgradeChance;
+      const megaUpgradeCondition = 100 - megaUpgradeChance;
+      const withstandCondition = 100 - durabilityInProccess;
+
+      const drawIfUpgradeSucceed = this.getRandomPercent();
       spinCounter++;
-      essenceCounter += upgradeAdditionals[i][0] ? 1 : 0;
-      reolCounter += upgradeAdditionals[i][1] ? 1 : 0;
-      dviggCounter += upgradeAdditionals[i][2] ? 1 : 0;
+      essenceCounter += ifEssence ? 1 : 0;
+      reolCounter += ifReol ? 1 : 0;
+      dviggCounter += ifDvigg ? 1 : 0;
 
       let transcriptionArr = [
-        upgradeAdditionals[i][0], // czy eska [0]
-        upgradeAdditionals[i][1], // czy reaol [1]
-        upgradeAdditionals[i][2], // czy dvigg [2]
-        calcUpgradeChance(i), // szansa na ulepszenie [3]
-        upgradeAdditionals[i][2] ? 4 : 2, // szansa na MEGA [4]
-        upgradeAdditionals[i][1]
-          ? parseInt(durability) + 20
-          : parseInt(durability), // wytrzymalosc efektywna [5]
+        ifEssence, // czy eska [0]
+        ifReol, // czy reol [1]
+        ifDvigg, // czy dvigg [2]
+        upgradeChance, // szansa na ulepszenie [3]
+        megaUpgradeChance, // szansa na MEGA [4]
+        durabilityInProccess, // wytrzymalosc efektywna [5]
         drawIfUpgradeSucceed, // wylosowana wartosc [6]
-        i, // ulepszenie przed spinem [7]
+        upgradeLevel, // ulepszenie przed spinem [7]
       ];
 
       if (drawIfUpgradeSucceed < upgradeCondition) {
@@ -113,13 +119,14 @@ class multipleSimulationsLoop extends Component {
 
         if (drawIfUpgradesResets < withstandCondition) {
           // wyzerowane
-          i = 0;
+          upgradeLevel = 0;
+
           transcriptionArr.push(
             false, // info czy udane [8]
             false, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
             drawIfUpgradesResets, // wylosowana wartosc czy srzet wytrzyma [10]
-            i, // ulepszenie po spinie [11]
-            i >= upgradeGoal // czy osiągnięty cel ulepszania [12]
+            upgradeLevel, // ulepszenie po spinie [11]
+            isUpgradeGoalAcheved(upgradeLevel, upgradeGoal) // czy osiągnięty cel ulepszania [12]
           );
         } else {
           // sprzęt wytrzymał
@@ -127,35 +134,35 @@ class multipleSimulationsLoop extends Component {
             false, // info czy udane [8]
             true, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
             drawIfUpgradesResets, // wylosowana wartosc czy srzet wytrzyma [10]
-            i, // ulepszenie po spinie [11]
-            i >= upgradeGoal // czy osiągnięty cel ulepszania [12]
+            upgradeLevel, // ulepszenie po spinie [11]
+            isUpgradeGoalAcheved(upgradeLevel, upgradeGoal) // czy osiągnięty cel ulepszania [12]
           );
         }
       } else if (drawIfUpgradeSucceed < megaUpgradeCondition) {
         // udane zwykłe ulepszenie
-        i++;
+        upgradeLevel++;
         transcriptionArr.push(
           true, // info czy udane [8]
           false, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
           -1, // wylosowana wartosc czy srzet wytrzyma [10]
-          i, // ulepszenie po spinie [11]
-          i >= upgradeGoal // czy osiągnięty cel ulepszania [12]
+          upgradeLevel, // ulepszenie po spinie [11]
+          isUpgradeGoalAcheved(upgradeLevel, upgradeGoal) // czy osiągnięty cel ulepszania [12]
         );
       } else if (drawIfUpgradeSucceed >= megaUpgradeCondition) {
         // udane mega ulepszenie
-        i++;
-        i++;
+        upgradeLevel++;
+        upgradeLevel++;
         transcriptionArr.push(
           true, // info czy udane [8]
           true, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
           -1, // wylosowana wartosc czy srzet wytrzyma [10]
-          i, // ulepszenie po spinie [11]
-          i >= upgradeGoal // czy osiągnięty cel ulepszania [12]
+          upgradeLevel, // ulepszenie po spinie [11]
+          isUpgradeGoalAcheved(upgradeLevel, upgradeGoal) // czy osiągnięty cel ulepszania [12]
         );
       }
 
       upgradingProccessTranscription.push(transcriptionArr);
-    } while (i < this.props.upgradeGoal);
+    } while (upgradeLevel < this.props.upgradeGoal);
     return [
       spinCounter,
       essenceCounter,
@@ -166,8 +173,9 @@ class multipleSimulationsLoop extends Component {
   };
 
   multipleSimulationsLoop = (event) => {
-    const upgradeSimulationsTarget = event.target[0].value;
     event.preventDefault();
+
+    const upgradeSimulationsTarget = event.target[0].value;
     const { singleSimulationProccess } = this;
     let upgradingProccessTranscription = [];
 
