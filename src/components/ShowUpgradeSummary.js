@@ -96,10 +96,10 @@ class ShowUpgradeSummary extends Component {
       inhibCost,
       spinCost,
     } = this.props;
-    const { upgradingProccessTranscription } = this.props;
+    const { allSimulationsData } = this.props;
     // const { showSpinTranscription } = this;
 
-    // console.log(upgradingProccessTranscription);
+    // console.log(allSimulationsData);
 
     let spinsPerSingleProccess = 0;
     let spinsAmountGlobal = 0;
@@ -110,7 +110,7 @@ class ShowUpgradeSummary extends Component {
     let dviggAmountPerSingleProccess = 0;
     let dviggAmountGlobal = 0;
 
-    upgradingProccessTranscription.map((singleSimulationProccess) => {
+    allSimulationsData.map((singleSimulationProccess) => {
       singleSimulationProccess.map((singleSpin, index) => {
         essencesAmountPerSingleProccess += singleSpin[0] ? 1 : 0;
         reolAmountPerSingleProccess += singleSpin[1] ? 1 : 0;
@@ -133,76 +133,53 @@ class ShowUpgradeSummary extends Component {
       return null;
     });
     let averageSpinAmount =
-      Math.round(
-        (spinsAmountGlobal / upgradingProccessTranscription.length) * 100
-      ) / 100;
+      Math.round((spinsAmountGlobal / allSimulationsData.length) * 100) / 100;
     let averageInhibAmount =
-      Math.round(
-        (spinsAmountGlobal / upgradingProccessTranscription.length) * 100
-      ) / 100;
+      Math.round((spinsAmountGlobal / allSimulationsData.length) * 100) / 100;
     let averageFlaskAmount =
-      Math.round(
-        (spinsAmountGlobal / upgradingProccessTranscription.length) * 100
-      ) / 100;
+      Math.round((spinsAmountGlobal / allSimulationsData.length) * 100) / 100;
     let averageEssenceAmount =
-      Math.round(
-        (essencesAmountGlobal / upgradingProccessTranscription.length) * 100
-      ) / 100;
+      Math.round((essencesAmountGlobal / allSimulationsData.length) * 100) /
+      100;
     let averageReolAmount =
-      Math.round(
-        (reolAmountGlobal / upgradingProccessTranscription.length) * 100
-      ) / 100;
+      Math.round((reolAmountGlobal / allSimulationsData.length) * 100) / 100;
     let averageDviggAmount =
-      Math.round(
-        (dviggAmountGlobal / upgradingProccessTranscription.length) * 100
-      ) / 100;
+      Math.round((dviggAmountGlobal / allSimulationsData.length) * 100) / 100;
 
     let averageSpinCost =
       Math.round(
-        ((spinsAmountGlobal / upgradingProccessTranscription.length) *
-          spinCost) /
-          10000
+        ((spinsAmountGlobal / allSimulationsData.length) * spinCost) / 10000
       ) / 100;
     let averageInhibCost =
       Math.round(
-        ((spinsAmountGlobal / upgradingProccessTranscription.length) *
+        ((spinsAmountGlobal / allSimulationsData.length) *
           inhibCost *
           platinumRate) /
           10000
       ) / 100;
     let averageFlaskCost =
       Math.round(
-        ((spinsAmountGlobal / upgradingProccessTranscription.length) *
-          flaskRate) /
-          10000
+        ((spinsAmountGlobal / allSimulationsData.length) * flaskRate) / 10000
       ) / 100;
     let averageEssenceCost =
       Math.round(
-        ((essencesAmountGlobal / upgradingProccessTranscription.length) *
-          essenceRate) /
+        ((essencesAmountGlobal / allSimulationsData.length) * essenceRate) /
           10000
       ) / 100;
     let averageReolCost =
       Math.round(
-        ((reolAmountGlobal / upgradingProccessTranscription.length) *
-          reolRate) /
-          10000
+        ((reolAmountGlobal / allSimulationsData.length) * reolRate) / 10000
       ) / 100;
     let averageDviggCost =
       Math.round(
-        ((dviggAmountGlobal / upgradingProccessTranscription.length) *
-          dviggRate) /
-          10000
+        ((dviggAmountGlobal / allSimulationsData.length) * dviggRate) / 10000
       ) / 100;
 
     return (
       <div className="summary">
         <h5>Podsumowanie</h5>
         <ul>
-          <li>
-            Wykonano {upgradingProccessTranscription.length} procesów
-            ulepszania.
-          </li>
+          <li>Wykonano {allSimulationsData.length} procesów ulepszania.</li>
           <li>Zasymulowano {spinsAmountGlobal} zakręceń zegara</li>
           <li>
             Użyto:

@@ -4,7 +4,7 @@ import ShowUpgradeSummary from "./ShowUpgradeSummary.js";
 class multipleSimulationsLoop extends Component {
   state = {
     upgradeSimulationsAmount: 1,
-    upgradingProccessTranscription: [],
+    allSimulationsData: [],
 
     isSummaryShown: false,
   };
@@ -71,11 +71,7 @@ class multipleSimulationsLoop extends Component {
 
   singleSimulationProccess = () => {
     let upgradeLevel = 0;
-    let spinCounter = 0;
-    let essenceCounter = 0;
-    let reolCounter = 0;
-    let dviggCounter = 0;
-    let upgradingProccessTranscription = [];
+    let upgradeProccessData = [];
 
     const { upgradeAdditionals } = this.props;
     const { durability } = this.props;
@@ -97,12 +93,8 @@ class multipleSimulationsLoop extends Component {
       const withstandCondition = 100 - durabilityInProccess;
 
       const drawIfUpgradeSucceed = this.getRandomPercent();
-      spinCounter++;
-      essenceCounter += ifEssence ? 1 : 0;
-      reolCounter += ifReol ? 1 : 0;
-      dviggCounter += ifDvigg ? 1 : 0;
 
-      let transcriptionArr = [
+      let singleSpinData = [
         ifEssence, // czy eska [0]
         ifReol, // czy reol [1]
         ifDvigg, // czy dvigg [2]
@@ -121,7 +113,7 @@ class multipleSimulationsLoop extends Component {
           // wyzerowane
           upgradeLevel = 0;
 
-          transcriptionArr.push(
+          singleSpinData.push(
             false, // info czy udane [8]
             false, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
             drawIfUpgradesResets, // wylosowana wartosc czy srzet wytrzyma [10]
@@ -130,7 +122,7 @@ class multipleSimulationsLoop extends Component {
           );
         } else {
           // sprzęt wytrzymał
-          transcriptionArr.push(
+          singleSpinData.push(
             false, // info czy udane [8]
             true, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
             drawIfUpgradesResets, // wylosowana wartosc czy srzet wytrzyma [10]
@@ -141,7 +133,7 @@ class multipleSimulationsLoop extends Component {
       } else if (drawIfUpgradeSucceed < megaUpgradeCondition) {
         // udane zwykłe ulepszenie
         upgradeLevel++;
-        transcriptionArr.push(
+        singleSpinData.push(
           true, // info czy udane [8]
           false, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
           -1, // wylosowana wartosc czy srzet wytrzyma [10]
@@ -152,7 +144,7 @@ class multipleSimulationsLoop extends Component {
         // udane mega ulepszenie
         upgradeLevel++;
         upgradeLevel++;
-        transcriptionArr.push(
+        singleSpinData.push(
           true, // info czy udane [8]
           true, // info czy sprzet wyrtrzymal [9] // info czy udane MEGA [9]
           -1, // wylosowana wartosc czy srzet wytrzyma [10]
@@ -161,34 +153,24 @@ class multipleSimulationsLoop extends Component {
         );
       }
 
-      upgradingProccessTranscription.push(transcriptionArr);
+      upgradeProccessData.push(singleSpinData);
     } while (upgradeLevel < this.props.upgradeGoal);
-    return [
-      spinCounter,
-      essenceCounter,
-      reolCounter,
-      dviggCounter,
-      upgradingProccessTranscription,
-    ];
+    return upgradeProccessData;
   };
 
-  multipleSimulationsLoop = (event) => {
-    event.preventDefault();
+  multipleSimulationsLoop = (e) => {
+    e.preventDefault();
 
-    const upgradeSimulationsTarget = event.target[0].value;
+    const upgradeSimulationsTarget = e.target[0].value;
     const { singleSimulationProccess } = this;
-    let upgradingProccessTranscription = [];
+    let allSimulationsData = [];
 
-    let i = 0;
-    do {
-      const simulationResult = singleSimulationProccess();
-
-      upgradingProccessTranscription.push(simulationResult[4]);
-      i++;
-    } while (i < upgradeSimulationsTarget);
+    for (let i = 0; i < upgradeSimulationsTarget; i++) {
+      allSimulationsData.push(singleSimulationProccess());
+    }
 
     this.setState({
-      upgradingProccessTranscription,
+      allSimulationsData,
       isSummaryShown: true,
     });
   };
@@ -197,54 +179,67 @@ class multipleSimulationsLoop extends Component {
     const {
       upgradeSimulationsAmount,
       isSummaryShown,
-      upgradingProccessTranscription,
+      allSimulationsData,
     } = this.state;
 
     return (
       <>
         <div className="multipleSimulationsLoopContainer">
-          <form onSubmit={(e) => multipleSimulationsLoop(e)}>
-            <label>
-              <span className="newLine">
-                Wybierz ile symulacji ulepszania chcesz przeprowadzić (1
-                symulacja to pełny proces ulepszania od +0 do wybranego celu
-                ulepszenia)
-              </span>
-              <select
-                onChange={handleChange}
-                name="upgradeSimulationsAmount"
-                value={upgradeSimulationsAmount}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="10">10</option>
-                <option value="100">100</option>
-                <option value="1000">1000</option>
-                <option value="10000">10 000</option>
-                <option value="100000">100 000 (uwaga)</option>
-                {/* <option value="1000000">1 000 000 (uwaga!!!)</option> */}
-              </select>
-            </label>
-            <div>
-              <button className="doSimulationBtn">Przeprowadź symulacje</button>
-            </div>
-          </form>
+          <SimulationForm
+            handleChange={handleChange}
+            upgradeSimulationsAmount={upgradeSimulationsAmount}
+            multipleSimulationsLoop={multipleSimulationsLoop}
+          />
         </div>
-        {/* <ShowUpgradeTranscription
-          upgradingProccessTranscription={
-            this.state.upgradingProccessTranscription
-          }
-        /> */}
-        <ShowUpgradeSummary
-          upgradingProccessTranscription={upgradingProccessTranscription}
-          isSummaryShown={isSummaryShown}
-          {...this.props}
-        />
+        <div className="showUpgradeSummaryContainer">
+          <ShowUpgradeSummary
+            allSimulationsData={allSimulationsData}
+            isSummaryShown={isSummaryShown}
+            {...this.props}
+          />
+        </div>
       </>
     );
   }
 }
-// </div>
+class SimulationForm extends Component {
+  render() {
+    const {
+      handleChange,
+      upgradeSimulationsAmount,
+      multipleSimulationsLoop,
+    } = this.props;
+
+    return (
+      <form onSubmit={(e) => multipleSimulationsLoop(e)}>
+        <label>
+          <span className="newLine">
+            Wybierz ile symulacji ulepszania chcesz przeprowadzić (1 symulacja
+            to pełny proces ulepszania od +0 do wybranego celu ulepszenia)
+          </span>
+          <select
+            onChange={handleChange}
+            name="upgradeSimulationsAmount"
+            value={upgradeSimulationsAmount}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="100">100</option>
+            <option value="1000">1000</option>
+            <option value="10000">10 000</option>
+            <option value="100000">100 000 (uwaga)</option>
+            {/* <option value="1000000">1 000 000 (uwaga!!!)</option> */}
+          </select>
+        </label>
+        <div>
+          <button className="doSimulationBtn">Przeprowadź symulacje</button>
+        </div>
+      </form>
+    );
+  }
+}
 
 export default multipleSimulationsLoop;
