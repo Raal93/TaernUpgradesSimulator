@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-// Component is not in use currently
-
 class ShowUpgradeTranscription extends Component {
   resultMsg = (ifUpgradeSucceed, ifWithstoodOrMega) => {
     if (ifUpgradeSucceed && ifWithstoodOrMega) {
@@ -31,16 +29,16 @@ class ShowUpgradeTranscription extends Component {
   };
 
   showTranscription = () => {
-    const { upgradingProccessTranscription } = this.props;
+    // const { upgradingProccessTranscription } = this.props;
+    const { curentSimulationProccess } = this.props;
     const { resultMsg, ifwithstoodMsg } = this;
 
-    return upgradingProccessTranscription.map((item, index) => {
-      return (
-        <div className="upgradeProccess" key={index}>
-          {item.map((item, index) => {
-            return (
-              <div className="singleSpin">
-                {/* // czy eska [0]
+    return (
+      <div className="upgradeProccess">
+        {curentSimulationProccess.map((item, index) => {
+          return (
+            <div className="singleSpin" key={index}>
+              {/* // czy eska [0]
                   // czy reaol [1]
                   // czy dvigg [2]
                   // szansa na ulepszenie [3]
@@ -53,60 +51,53 @@ class ShowUpgradeTranscription extends Component {
                   // wylosowana wartosc czy srzet wytrzyma [10]
                   // ulepszenie po spinie [11]
                    */}
-                <ul>
-                  <li>
-                    Spin nr <strong>{index + 1}:</strong>
-                  </li>
-                  <li>
-                    Ulepszenie przed próbą ulepszenia{" "}
-                    <strong>+{item[7]}</strong>
-                  </li>
-                  <li>
-                    Użyto: inhib, flaszka, {item[0] ? "esencja, " : ""}
-                    {item[1] ? "reol, " : ""}
-                    {item[2] ? "dvigg, " : ""}
-                  </li>
-                  <li>
-                    Szansa na kolejne ulepszenie {item[3]}% (mega {item[4]}%)
-                  </li>
-                  <li>Wytrzymałość efektywna: {item[5]}% </li>
-                  <li>
-                    Losowanie czy ulepszy: {item[6]}% (próg wejscia:{" "}
-                    {100 - item[3]}%, mega: {100 - item[4]}%
-                    {item[6] < 100 - item[3]
-                      ? ", zabrakło " +
-                        Math.round((100 - item[3] - item[6]) * 100) / 100 +
-                        "%)."
-                      : ")."}
-                  </li>
-                  {item[8] ? null : ifwithstoodMsg(item[10], item[5])}
-                  <li>
-                    <strong>{resultMsg(item[8], item[9])}</strong>
-                  </li>
-                  <li>
-                    <strong>
-                      Aktualne ulepszenie: +{item[11]}
-                      {item[12] ? ". Cel ulepszania osiągnięty." : null}
-                    </strong>
-                  </li>
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-      );
-    });
+              <ul>
+                <li>
+                  Spin nr <strong>{index + 1}:</strong>
+                </li>
+                <li>
+                  Ulepszenie przed próbą ulepszenia <strong>+{item[7]}</strong>
+                </li>
+                <li>
+                  Użyto: inhib, flaszka, {item[0] ? "esencja, " : ""}
+                  {item[1] ? "reol, " : ""}
+                  {item[2] ? "dvigg, " : ""}
+                </li>
+                <li>
+                  Szansa na kolejne ulepszenie {item[3]}% (mega {item[4]}%)
+                </li>
+                <li>Wytrzymałość efektywna: {item[5]}% </li>
+                <li>
+                  Losowanie czy ulepszy: {item[6]}% (próg wejscia:{" "}
+                  {100 - item[3]}%, mega: {100 - item[4]}%
+                  {item[6] < 100 - item[3]
+                    ? ", zabrakło " +
+                      Math.round((100 - item[3] - item[6]) * 100) / 100 +
+                      "%)."
+                    : ")."}
+                </li>
+                {item[8] ? null : ifwithstoodMsg(item[10], item[5])}
+                <li>
+                  <strong>{resultMsg(item[8], item[9])}</strong>
+                </li>
+                <li>
+                  <strong>
+                    Aktualne ulepszenie: +{item[11]}
+                    {item[12] ? ". Cel ulepszania osiągnięty." : null}
+                  </strong>
+                </li>
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   render() {
-    // const { showTranscription } = this;
+    const { showTranscription } = this;
 
-    return (
-      <div className="simulateTranscripton">
-        {/* <h5>Zapis ulepszania:</h5> */}
-        {/* {showTranscription()} */}
-      </div>
-    );
+    return <div className="simulateTranscripton">{showTranscription()}</div>;
   }
 }
 

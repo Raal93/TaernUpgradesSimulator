@@ -3,7 +3,7 @@ import ShowUpgradeSummary from "./ShowUpgradeSummary.js";
 
 class multipleSimulationsLoop extends Component {
   state = {
-    upgradeSimulationsAmount: 1,
+    upgradeSimulationsAmount: 1000,
     allSimulationsData: [],
 
     isSummaryShown: false,

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ShowUpgradeTranscription from "./ShowUpgradeTranscription.js";
 
 class ShowUpgradeSummary extends Component {
   state = {
@@ -224,26 +225,30 @@ class ShowUpgradeSummary extends Component {
               </li>
             </ul>
           </li>
-          {/* <li>
+          <li>
             Średni koszt ulepszenia wyniósł: {calcAverageUpgradeCost(averages)}
             kk
           </li>
           <li>
-            Najbardziej pechowe ulepszenie wyniosło:
-            <SingleSimulationProccessData
-              curentSimulationProccess={
-                allSimulationsData[indexOfMaxSpinsProccess]
-              }
-            />
-          </li>
-          <li>
-            Najszczęśliwsze ulepszenie wyniosło:
+            Najszczęśliwsze ulepszenie:
             <SingleSimulationProccessData
               curentSimulationProccess={
                 allSimulationsData[indexOfMinSpinsProccess]
               }
+              indexofProccess={indexOfMinSpinsProccess}
+              {...this.props}
             />
-          </li> */}
+          </li>
+          <li>
+            Najbardziej pechowe ulepszenie:
+            <SingleSimulationProccessData
+              curentSimulationProccess={
+                allSimulationsData[indexOfMaxSpinsProccess]
+              }
+              indexofProccess={indexOfMaxSpinsProccess}
+              {...this.props}
+            />
+          </li>
         </ul>
       </>
     );
@@ -265,6 +270,10 @@ class ShowUpgradeSummary extends Component {
 export default ShowUpgradeSummary;
 
 class SingleSimulationProccessData extends Component {
+  state = {
+    isTranscriptionShown: false,
+  };
+
   calcSum = (curentSimulationProccess, item) => {
     let itemCounter = 0;
 
@@ -276,19 +285,82 @@ class SingleSimulationProccessData extends Component {
     return itemCounter;
   };
 
+  calcCost = (x, y) => {
+    return Math.round((x * y) / 10000) / 100;
+  };
+
+  handleShowTranscrptionBtnClick = () => {
+    this.setState({
+      isTranscriptionShown: !this.state.isTranscriptionShown,
+    });
+  };
+
   render() {
-    const { curentSimulationProccess } = this.props;
-    const { calcSum } = this;
+    const {
+      curentSimulationProccess,
+      essenceRate,
+      platinumRate,
+      flaskRate,
+      reolRate,
+      dviggRate,
+      inhibCost,
+      spinCost,
+    } = this.props;
+    const { isTranscriptionShown } = this.state;
+    const { calcSum, calcCost, handleShowTranscrptionBtnClick } = this;
+    const spinAmount = curentSimulationProccess.length;
+    const essenceAmount = calcSum(curentSimulationProccess, 0);
+    const reolAmount = calcSum(curentSimulationProccess, 1);
+    const dviggAmount = calcSum(curentSimulationProccess, 2);
+
+    const spinTotalCost = calcCost(spinAmount, spinCost);
+    const inhibTotalCost = calcCost(spinAmount, inhibCost * platinumRate);
+    const flaskTotalCost = calcCost(spinAmount, flaskRate);
+    const essenceTotalCost = calcCost(essenceAmount, essenceRate);
+    const reolTotalCost = calcCost(reolAmount, reolRate);
+    const dviggTotalCost = calcCost(dviggAmount, dviggRate);
+
+    const upgradeTotalCost =
+      Math.round(
+        (dviggTotalCost +
+          inhibTotalCost +
+          flaskTotalCost +
+          essenceTotalCost +
+          reolTotalCost +
+          dviggTotalCost) *
+          100
+      ) / 100;
 
     return (
-      <ul>
-        <li>{curentSimulationProccess.length} zakręceń</li>
-        <li>{curentSimulationProccess.length} inhibitorów</li>
-        <li>{curentSimulationProccess.length} flasz</li>
-        <li>{calcSum(curentSimulationProccess, 0)} esencji</li>
-        <li>{calcSum(curentSimulationProccess, 1)} reoli</li>
-        <li>{calcSum(curentSimulationProccess, 2)} dviggów</li>
-      </ul>
+      <>
+        <ul>
+          <li>
+            {spinAmount} zakręceń ({spinTotalCost}kk)
+          </li>
+          <li>
+            {spinAmount} inhibitorów ({inhibTotalCost}kk)
+          </li>
+          <li>
+            {spinAmount} flasz ({flaskTotalCost}kk)
+          </li>
+          <li>
+            {essenceAmount} esencji ({essenceTotalCost}kk)
+          </li>
+          <li>
+            {reolAmount} reoli ({reolTotalCost}kk)
+          </li>
+          <li>
+            {dviggAmount} dviggów ({dviggTotalCost}kk)
+          </li>
+          <li>Łączny koszt ulepszenia wyniósł: {upgradeTotalCost}kk</li>
+        </ul>
+        <button onClick={handleShowTranscrptionBtnClick}>
+          Zobacz przebieg tego ulepszenia
+        </button>
+        {isTranscriptionShown ? (
+          <ShowUpgradeTranscription {...this.props} />
+        ) : null}
+      </>
     );
   }
 }
