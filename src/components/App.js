@@ -155,6 +155,7 @@ class App extends Component {
           durability={durability}
           inhibCost={inhibCost}
           spinCost={spinCost}
+          isTranscriptionShown={false}
         />
       </div>
     );

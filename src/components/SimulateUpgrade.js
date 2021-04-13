@@ -9,6 +9,12 @@ class multipleSimulationsLoop extends Component {
     isSummaryShown: false,
   };
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      isSummaryShown: props.isSummaryShown,
+    });
+  }
+
   getRandomPercent() {
     let rand;
     do {
@@ -174,6 +180,7 @@ class multipleSimulationsLoop extends Component {
       isSummaryShown: true,
     });
   };
+
   render() {
     const { multipleSimulationsLoop, handleChange } = this;
     const {
@@ -195,6 +202,7 @@ class multipleSimulationsLoop extends Component {
           <ShowUpgradeSummary
             allSimulationsData={allSimulationsData}
             isSummaryShown={isSummaryShown}
+            isTranscriptionShown={false}
             {...this.props}
           />
         </div>
@@ -230,7 +238,7 @@ class SimulationForm extends Component {
             <option value="100">100</option>
             <option value="1000">1000</option>
             <option value="10000">10 000</option>
-            <option value="100000">100 000 (uwaga)</option>
+            {/* <option value="100000">100 000 (uwaga)</option> */}
             {/* <option value="1000000">1 000 000 (uwaga!!!)</option> */}
           </select>
         </label>

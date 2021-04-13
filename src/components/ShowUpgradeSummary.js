@@ -274,6 +274,12 @@ class SingleSimulationProccessData extends Component {
     isTranscriptionShown: false,
   };
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      isTranscriptionShown: props.isTranscriptionShown,
+    });
+  }
+
   calcSum = (curentSimulationProccess, item) => {
     let itemCounter = 0;
 
