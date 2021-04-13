@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/TaernUpgradesSimulator/static/css/main.9fb74122.chunk.css",
-    "main.js": "/TaernUpgradesSimulator/static/js/main.b0c1a7ef.chunk.js",
-    "main.js.map": "/TaernUpgradesSimulator/static/js/main.b0c1a7ef.chunk.js.map",
+    "main.css": "/TaernUpgradesSimulator/static/css/main.ccf6900e.chunk.css",
+    "main.js": "/TaernUpgradesSimulator/static/js/main.9f5296ae.chunk.js",
+    "main.js.map": "/TaernUpgradesSimulator/static/js/main.9f5296ae.chunk.js.map",
     "runtime-main.js": "/TaernUpgradesSimulator/static/js/runtime-main.bea00529.js",
     "runtime-main.js.map": "/TaernUpgradesSimulator/static/js/runtime-main.bea00529.js.map",
     "static/css/2.ef9168ec.chunk.css": "/TaernUpgradesSimulator/static/css/2.ef9168ec.chunk.css",
-    "static/js/2.0f261df7.chunk.js": "/TaernUpgradesSimulator/static/js/2.0f261df7.chunk.js",
-    "static/js/2.0f261df7.chunk.js.map": "/TaernUpgradesSimulator/static/js/2.0f261df7.chunk.js.map",
+    "static/js/2.517dd3d5.chunk.js": "/TaernUpgradesSimulator/static/js/2.517dd3d5.chunk.js",
+    "static/js/2.517dd3d5.chunk.js.map": "/TaernUpgradesSimulator/static/js/2.517dd3d5.chunk.js.map",
     "static/js/3.c2a55909.chunk.js": "/TaernUpgradesSimulator/static/js/3.c2a55909.chunk.js",
     "static/js/3.c2a55909.chunk.js.map": "/TaernUpgradesSimulator/static/js/3.c2a55909.chunk.js.map",
     "index.html": "/TaernUpgradesSimulator/index.html",
     "static/css/2.ef9168ec.chunk.css.map": "/TaernUpgradesSimulator/static/css/2.ef9168ec.chunk.css.map",
-    "static/css/main.9fb74122.chunk.css.map": "/TaernUpgradesSimulator/static/css/main.9fb74122.chunk.css.map",
-    "static/js/2.0f261df7.chunk.js.LICENSE.txt": "/TaernUpgradesSimulator/static/js/2.0f261df7.chunk.js.LICENSE.txt"
+    "static/css/main.ccf6900e.chunk.css.map": "/TaernUpgradesSimulator/static/css/main.ccf6900e.chunk.css.map",
+    "static/js/2.517dd3d5.chunk.js.LICENSE.txt": "/TaernUpgradesSimulator/static/js/2.517dd3d5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.bea00529.js",
     "static/css/2.ef9168ec.chunk.css",
-    "static/js/2.0f261df7.chunk.js",
-    "static/css/main.9fb74122.chunk.css",
-    "static/js/main.b0c1a7ef.chunk.js"
+    "static/js/2.517dd3d5.chunk.js",
+    "static/css/main.ccf6900e.chunk.css",
+    "static/js/main.9f5296ae.chunk.js"
   ]
 }
