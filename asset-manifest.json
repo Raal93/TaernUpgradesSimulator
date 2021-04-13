@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/TaernUpgradesSimulator/static/css/main.ccf6900e.chunk.css",
-    "main.js": "/TaernUpgradesSimulator/static/js/main.9f5296ae.chunk.js",
-    "main.js.map": "/TaernUpgradesSimulator/static/js/main.9f5296ae.chunk.js.map",
+    "main.js": "/TaernUpgradesSimulator/static/js/main.f2e37348.chunk.js",
+    "main.js.map": "/TaernUpgradesSimulator/static/js/main.f2e37348.chunk.js.map",
     "runtime-main.js": "/TaernUpgradesSimulator/static/js/runtime-main.bea00529.js",
     "runtime-main.js.map": "/TaernUpgradesSimulator/static/js/runtime-main.bea00529.js.map",
     "static/css/2.ef9168ec.chunk.css": "/TaernUpgradesSimulator/static/css/2.ef9168ec.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.ef9168ec.chunk.css",
     "static/js/2.517dd3d5.chunk.js",
     "static/css/main.ccf6900e.chunk.css",
-    "static/js/main.9f5296ae.chunk.js"
+    "static/js/main.f2e37348.chunk.js"
   ]
 }
